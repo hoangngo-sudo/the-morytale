@@ -6,8 +6,6 @@ import Marquee from '@/components/Marquee/Marquee.tsx'
 import SignInModal from '@/components/SignInModal/SignInModal.tsx'
 import { useAuthStore } from '@/store/authStore.ts'
 
-/* ── Hoisted static elements (rendering-hoist-jsx) ── */
-
 const scissorsIcon = (
   <div className="scissors-icon" aria-hidden="true">
     {/* <svg
@@ -26,8 +24,8 @@ const scissorsIcon = (
 )
 
 const featureIcon = (
-  <div className="feature-icon d-none d-md-block" aria-hidden="true">
-    <img src="/reel.svg" width="180" height="180" alt="" />
+  <div className="feature-icon" aria-hidden="true">
+    <img src="/reel.svg" alt="" />
   </div>
 )
 
@@ -56,8 +54,6 @@ const wavyFooter = (
   </div>
 )
 
-/* ── Component ── */
-
 function LandingPage() {
   const navigate = useNavigate()
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated)
@@ -81,8 +77,7 @@ function LandingPage() {
       {scissorsIcon}
       {featureIcon}
 
-      <section className="hero-section">
-        {/* decorativeLines removed */}
+      <section className="hero-section">{}
 
         <motion.h1
           className="hero-title fs-xxxl"
@@ -98,8 +93,7 @@ function LandingPage() {
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8, delay: 0.3, ease: 'easeOut' }}
-        >
-          {/* <p className="tagline-top fs-s">Impressionism &ndash; Realism</p> */}
+        >{}
           <p className="tagline-body fs-base">
             Where random moments strikes into
             <br />

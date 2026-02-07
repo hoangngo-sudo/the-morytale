@@ -57,13 +57,11 @@ function StoryPage() {
     const scrollInterval = columnsScrollRange / travel
     const scrollTop = window.scrollY
 
-    // Before parallax zone — reset to origin
     if (scrollTop < topOfColumns) {
       rightCol.style.transform = 'translate3d(0px, 0px, 0px)'
       return
     }
 
-    // Calculate offset and clamp to [0, travel] — no overshoot, no feedback loop
     const offset = Math.round((scrollTop - topOfColumns) / scrollInterval)
     const clampedOffset = Math.max(0, Math.min(offset, travel))
     rightCol.style.transform = `translate3d(0px, ${clampedOffset}px, 0px)`
@@ -81,13 +79,11 @@ function StoryPage() {
     }
   }, [handleParallax])
 
-  // New logic for controls
   const navigate = useNavigate()
   const currentTrack = useTrackStore((s) => s.currentTrack)
   const concludeTrack = useTrackStore((s) => s.concludeTrack)
   const fetchCurrentTrack = useTrackStore((s) => s.fetchCurrentTrack)
 
-  // Ensure we have the track loaded
   useEffect(() => {
     fetchCurrentTrack()
   }, [fetchCurrentTrack])
@@ -96,8 +92,6 @@ function StoryPage() {
 
   const handleEndStory = async () => {
     if (currentTrack?.id) {
-      // Optimistically navigate or show loading?
-      // For now, just call API and go to recap
       const success = await concludeTrack(currentTrack.id)
       if (success) {
         navigate('/story/recap')
@@ -105,8 +99,8 @@ function StoryPage() {
     }
   }
 
-  // Disable "End Story" if not enough nodes? logic wasn't specified but typically 10 is the goal
-  // Disable "New Node" if 0 remaining?
+  // Disable "End Story" if not enough nodes. logic wasn't specified but typically 10 is the goal
+  // Disable "New Node" if 0 remaining
   const canAddNode = picsRemaining > 0
 
   return (
@@ -135,8 +129,7 @@ function StoryPage() {
         </div>
       </div>
 
-      <div className="story-body">
-        {/* Left panel: two-column parallax collage */}
+      <div className="story-body">{}
         <div className="story-left-panel">
           <h2 className="font-hand fs-xl collage-title">Your collage</h2>
 
@@ -145,8 +138,7 @@ function StoryPage() {
               Create your story now
             </div>
           ) : (
-            <div className="row parallax-section" ref={parallaxContainerRef}>
-              {/* Left sub-column (Even indices) */}
+            <div className="row parallax-section" ref={parallaxContainerRef}>{}
               <div className="col-6" ref={parallaxLeftRef}>
                 {currentTrack.nodes.filter((_, i) => i % 2 === 0).map((node, i) => (
                   <motion.div
@@ -166,9 +158,7 @@ function StoryPage() {
                     <p className="caption fs-xs">{node.caption}</p>
                   </motion.div>
                 ))}
-              </div>
-
-              {/* Right sub-column (Odd indices) */}
+              </div>{}
               <div className="col-6" ref={parallaxRightRef}>
                 {currentTrack.nodes.filter((_, i) => i % 2 !== 0).map((node, i) => (
                   <motion.div
@@ -193,7 +183,7 @@ function StoryPage() {
           )}
         </div>
 
-        {/* Right panel: independently scrolling storyline */}
+        {/* Right panel*/}
         <div className="story-right-panel">
           <div className="storyline-column">
             <h2 className="storyline-header fs-xl">
@@ -209,8 +199,7 @@ function StoryPage() {
                 <p key={i} className="fs-base">
                   {text}
                 </p>
-              ))}
-              {/* Blinking dots if story is incomplete (assuming < 10 nodes means incomplete) */}
+              ))}{}
               {picsRemaining > 0 && (
                 <span className="blinking-dots fs-xl"> . . . </span>
               )}
