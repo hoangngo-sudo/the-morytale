@@ -14,7 +14,7 @@ interface TrackState {
   fetchCommunityTracks: () => Promise<void>
   getTracksByOwner: (ownerId: string) => Track[]
   concludeTrack: (id: string) => Promise<boolean>
-  uploadItem: (formData: FormData) => Promise<boolean>
+  createItem: (formData: FormData) => Promise<boolean>
 }
 
 const transformTrack = (backendTrack: any): Track => {
@@ -127,7 +127,7 @@ export const useTrackStore = create<TrackState>((set, get) => ({
     }
   },
 
-  uploadItem: async (formData: FormData) => {
+  createItem: async (formData: FormData) => {
     set({ isLoading: true })
     try {
       await api.createItem(formData)
@@ -135,7 +135,7 @@ export const useTrackStore = create<TrackState>((set, get) => ({
       await get().fetchCurrentTrack()
       return true
     } catch (err) {
-      console.error('Failed to upload item', err)
+      console.error('Failed to create item', err)
       return false
     } finally {
       set({ isLoading: false })
