@@ -1,6 +1,7 @@
 import { useRef, useCallback, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 
+import { useTrackStore } from '@/store/trackStore.ts'
 interface UploadModalProps {
   isOpen: boolean
   onClose: () => void
@@ -49,6 +50,9 @@ function UploadModal({ isOpen, onClose }: UploadModalProps) {
     setPreview(url)
   }, [])
 
+  const uploadItem = useTrackStore((s) => s.uploadItem)
+  const isLoading = useTrackStore((s) => s.isLoading)
+
   const handleFileChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const file = e.target.files?.[0]
@@ -85,18 +89,45 @@ function UploadModal({ isOpen, onClose }: UploadModalProps) {
 
   const handleOverlayClick = useCallback(
     (e: React.MouseEvent<HTMLDivElement>) => {
-      if (e.target === e.currentTarget) onClose()
+      if (e.target === e.currentTarget && !isLoading) onClose()
     },
-    [onClose],
+    [onClose, isLoading],
   )
 
-  const handleSave = useCallback(() => {
-    onClose()
-    setFileName('')
-    setCaption('')
-    if (preview) URL.revokeObjectURL(preview)
-    setPreview(null)
-  }, [onClose, preview])
+  const handleSave = useCallback(async () => {
+    if (!fileInputRef.current?.files?.[0]) return
+
+    const file = fileInputRef.current.files[0]
+    const formData = new FormData()
+
+    // Structure expected by backend:
+    // flattened: file in 'image', data JSON string in 'data'
+    // or grouped fields. The current backend (itemController.js:205) supports 'data' field JSON or direct body fields.
+    // Let's use direct fields for file + JSON data string for metadata as that's robust
+
+    // Actually looking at backend: 
+    // const files = req.files || [];
+    // if (req.body.data) ... JSON.parse(req.body.data)
+
+    formData.append('image', file)
+    formData.append('data', JSON.stringify({
+      content_type: 'image',
+      caption: caption,
+      description: '', // Optional
+    }))
+
+    const success = await uploadItem(formData)
+
+    if (success) {
+      onClose()
+      setFileName('')
+      setCaption('')
+      if (preview) URL.revokeObjectURL(preview)
+      setPreview(null)
+    } else {
+      alert('Failed to upload. Please try again.')
+    }
+  }, [onClose, preview, caption, uploadItem])
 
   const handleCancel = useCallback(() => {
     onClose()
@@ -201,8 +232,9 @@ function UploadModal({ isOpen, onClose }: UploadModalProps) {
                 type="button"
                 className="btn-gradient btn-upload"
                 onClick={handleSave}
+                disabled={isLoading}
               >
-                <span>Save</span>
+                {isLoading ? 'Saving...' : 'Save'}
               </button>
             </div>
           </motion.div>
