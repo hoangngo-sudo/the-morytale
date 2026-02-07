@@ -75,9 +75,6 @@ function FinishTrackPage() {
               viewport={{ once: true }}
               transition={{ duration: 0.4 }}
             >
-              <div className="empty-slot">
-                <span className="fs-l">???</span>
-              </div>
             </motion.div>
           ))}
         </div>

@@ -47,7 +47,7 @@ function StoryRecapPage() {
       <Header variant="story" />
 
       <div className="recap-body">
-        {/* Variant A: Left unfinished */}
+        {/* This will be done soon huhu*/}
         <motion.section
           className="recap-section recap-unfinished"
           initial={{ opacity: 0, y: 40 }}
@@ -82,7 +82,7 @@ function StoryRecapPage() {
           </div>
         </motion.section>
 
-        {/* Variant B: The Cutting Room recap */}
+        {/* The Cutting Room recap */}
         <motion.section
           className="recap-section recap-polished"
           initial={{ opacity: 0, y: 40 }}

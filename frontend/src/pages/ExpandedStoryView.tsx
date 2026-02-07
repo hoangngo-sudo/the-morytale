@@ -69,9 +69,7 @@ function ExpandedStoryView() {
                 <span className="expanded-entry-date fs-xs">{node.date}</span>
               </div>
             </motion.div>
-          ))}
-
-          {/* Empty slots for remaining capacity */}
+          ))}{}
           {Array.from({ length: Math.max(0, 10 - track.nodes.length) }).map((_, i) => (
             <motion.div
               key={`empty-${i}`}
