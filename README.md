@@ -135,7 +135,7 @@ Responsibilities:
 ### Backend (Node.js / Express)
 
 REST API server responsible for:
-- authentication
+- authentication (Google OAuth 2.0)
 - track management
 - node linking
 - AI job scheduling
