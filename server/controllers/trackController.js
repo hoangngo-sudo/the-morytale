@@ -232,12 +232,35 @@ const concludeTrack = async (req, res) => {
     }
 };
 
+/**
+ * Get community tracks (feed)
+ * GET /api/tracks/community
+ */
+const getCommunityTracks = async (req, res) => {
+    try {
+        const tracks = await Track.find({ status: 'completed' })
+            .sort({ created_at: -1 })
+            .limit(20)
+            .populate('user_id', 'username avatar') // distinct from ownerId mapping
+            .populate({
+                path: 'node_ids',
+                populate: { path: 'user_item_id' }
+            });
+
+        res.json(tracks);
+    } catch (error) {
+        console.error('getCommunityTracks error:', error);
+        res.status(500).json({ message: 'Server error', error: error.message });
+    }
+};
+
 module.exports = {
     getCurrentTrack,
     getTrack,
     getWeeklyStory,
     updateTrack,
     getTrackHistory,
+    getCommunityTracks,
     concludeTrack,
     deleteTrack
 };

@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const authMiddleware = require('../middleware/authMiddleware');
-const { getCurrentTrack, getTrack, getWeeklyStory, updateTrack, getTrackHistory, concludeTrack, deleteTrack } = require('../controllers/trackController');
+const { getCurrentTrack, getTrack, getWeeklyStory, updateTrack, getTrackHistory, getCommunityTracks, concludeTrack, deleteTrack } = require('../controllers/trackController');
 
 // All routes are protected
 router.use(authMiddleware);
@@ -11,6 +11,9 @@ router.get('/current', getCurrentTrack);
 
 // GET /api/tracks/history - Get track history
 router.get('/history', getTrackHistory);
+
+// GET /api/tracks/community - Get community feed
+router.get('/community', getCommunityTracks);
 
 // GET /api/tracks/:id - Get a track by ID
 router.get('/:id', getTrack);

@@ -39,6 +39,7 @@ const api = {
 
   // Tracks
   getCurrentTrack: () => axiosInstance.get('/tracks/current'),
+  getCommunityTracks: () => axiosInstance.get('/tracks/community'),
   getTrackHistory: () => axiosInstance.get('/tracks/history'),
   getTrackById: (id: string) => axiosInstance.get(`/tracks/${id}`),
   concludeTrack: (id: string) => axiosInstance.post(`/tracks/${id}/conclude`),

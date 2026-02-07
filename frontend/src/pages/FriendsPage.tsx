@@ -27,6 +27,14 @@ const wavyFooter = (
 
 function FriendsPage() {
   const [activeTab, setActiveTab] = useState<'my-friends' | 'find'>('my-friends')
+  
+  // const friends = useSocialStore((s) => s.friends)
+  // const fetchFriends = useSocialStore((s) => s.fetchFriends)
+  // const isLoading = useSocialStore((s) => s.isLoading)
+
+  // useEffect(() => {
+  //   fetchFriends()
+  // }, [fetchFriends])
 
   return (
     <div className="page-frame story-page">

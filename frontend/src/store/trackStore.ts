@@ -5,11 +5,13 @@ import type { Track } from '@/types/index.ts'
 interface TrackState {
   currentTrack: Track | null
   pastTracks: Track[]
+  communityTracks: Track[]
   isLoading: boolean
   error: string | null
 
   fetchCurrentTrack: () => Promise<void>
   fetchTrackHistory: () => Promise<void>
+  fetchCommunityTracks: () => Promise<void>
   getTracksByOwner: (ownerId: string) => Track[]
   concludeTrack: (id: string) => Promise<boolean>
 }
@@ -45,6 +47,7 @@ const transformTrack = (backendTrack: any): Track => {
 export const useTrackStore = create<TrackState>((set, get) => ({
   currentTrack: null,
   pastTracks: [],
+  communityTracks: [],
   isLoading: false,
   error: null,
 
@@ -77,6 +80,22 @@ export const useTrackStore = create<TrackState>((set, get) => ({
     } catch (err) {
       console.error('Failed to fetch track history', err)
       set({ error: 'Failed to load history' })
+    } finally {
+      set({ isLoading: false })
+    }
+  },
+
+  fetchCommunityTracks: async () => {
+    set({ isLoading: true })
+    try {
+      const response = await api.getCommunityTracks()
+      const tracks = Array.isArray(response.data)
+        ? response.data.map(transformTrack)
+        : []
+      set({ communityTracks: tracks })
+    } catch (err) {
+      console.error('Failed to fetch community tracks', err)
+      // minimal error handling for explore
     } finally {
       set({ isLoading: false })
     }

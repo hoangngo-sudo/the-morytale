@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import Header from '@/components/Header/Header.tsx'
@@ -5,6 +6,11 @@ import { useTrackStore } from '@/store/trackStore.ts'
 
 function ExplorePage() {
   const communityTracks = useTrackStore((s) => s.communityTracks)
+  const fetchCommunityTracks = useTrackStore((s) => s.fetchCommunityTracks)
+
+  useEffect(() => {
+    fetchCommunityTracks()
+  }, [fetchCommunityTracks])
 
   return (
     <div className="page-frame story-page">
