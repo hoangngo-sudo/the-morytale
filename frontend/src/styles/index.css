@@ -255,11 +255,19 @@ body {
 
 .feature-icon {
   position: absolute;
-  left: clamp(2rem, 6vw, 5rem);
+  left: clamp(1rem, 6vw, 5rem);
   top: 50%;
   transform: translateY(-50%);
   opacity: 0.8;
   z-index: 3;
+  width: clamp(60px, 15vw, 180px);
+  height: auto;
+}
+
+.feature-icon img {
+  width: 100%;
+  height: auto;
+  display: block;
 }
 
 /* Wavy lines at bottom */
@@ -622,28 +630,47 @@ body {
   display: none;
 }
 
-.upload-modal-upload-link {
-  background: none;
-  border: none;
-  color: var(--off-white);
+/* Visual dropzone */
+.upload-dropzone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: clamp(1.5rem, 4vw, 2.5rem) 1rem;
+  border: 2px dashed var(--charcoal-border);
+  border-radius: 12px;
+  background-color: var(--charcoal-light);
   cursor: pointer;
-  text-align: left;
-  padding: 0;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.upload-dropzone:hover {
+  border-color: var(--mid-gray);
+  background-color: rgb(from var(--charcoal-light) r g b / 0.7);
+}
+
+.upload-dropzone-active {
+  border-color: var(--off-white);
+  background-color: rgb(255 255 255 / 0.05);
+}
+
+.upload-dropzone-text {
+  color: var(--off-white);
   --fl: 0;
-  opacity: 0.85;
-  transition: opacity 0.15s ease;
 }
 
-.upload-modal-upload-link:hover {
-  opacity: 1;
-  text-decoration: underline;
-  text-underline-offset: 3px;
+.upload-dropzone-hint {
+  color: var(--mid-gray);
+  --fl: -1;
 }
 
+/* Preview state: "Change photo" overlay button */
 .upload-modal-preview {
   border-radius: 8px;
   overflow: hidden;
   margin-top: 0.25rem;
+  position: relative;
 }
 
 .upload-modal-preview img {
@@ -652,6 +679,24 @@ body {
   border-radius: 8px;
   max-height: 200px;
   object-fit: cover;
+}
+
+.upload-modal-change-btn {
+  position: absolute;
+  bottom: 0.5rem;
+  right: 0.5rem;
+  background-color: rgb(0 0 0 / 0.6);
+  color: var(--off-white);
+  border: 1px solid var(--charcoal-border);
+  border-radius: 6px;
+  padding: 0.25rem 0.75rem;
+  cursor: pointer;
+  --fl: -1;
+  transition: background-color 0.15s ease;
+}
+
+.upload-modal-change-btn:hover {
+  background-color: rgb(0 0 0 / 0.8);
 }
 
 .upload-modal-filename {
@@ -684,36 +729,10 @@ body {
 
 .upload-modal-footer {
   display: flex;
-  justify-content: flex-start;
+  justify-content: flex-end;
   gap: 1rem;
-  padding-top: 0.5rem;
+  padding-top: 0.75rem;
   border-top: 1px dashed var(--charcoal-border);
-}
-
-.upload-modal-btn {
-  background: none;
-  border: 1px dashed var(--charcoal-border);
-  border-radius: 6px;
-  color: var(--mid-gray-light);
-  cursor: pointer;
-  padding: 0.35rem 1rem;
-  --fl: -1;
-  transition: color 0.15s ease, border-color 0.15s ease;
-}
-
-.upload-modal-btn:hover {
-  color: var(--off-white);
-  border-color: var(--mid-gray-light);
-}
-
-.upload-modal-btn-save {
-  color: var(--off-white);
-  border-style: solid;
-  border-color: var(--mid-gray);
-}
-
-.upload-modal-btn-save:hover {
-  border-color: var(--off-white);
 }
 
 /* =============================================
@@ -1712,6 +1731,15 @@ body {
 
 /* =============================================
    MARQUEE BANNER
+   =============================================
+   Seamless marquee technique by Ben Nadel.
+   https://www.bennadel.com/blog/4536-creating-a-marquee-effect-with-css-animations.htm
+
+   Two identical .marquee__item elements sit side-by-side.
+   Each item independently translates from 0% → -100% of its
+   own width. When item-1 reaches -100% (off-screen left) and
+   snaps back to 0%, item-2 is at the exact same visual position
+   because the timing is linear — so the reset is invisible.
    ============================================= */
 .marquee-banner {
   overflow: hidden;
@@ -1721,38 +1749,37 @@ body {
   position: relative;
 }
 
-.marquee-track {
+.marquee {
   display: flex;
+  overflow: hidden;
   white-space: nowrap;
-  will-change: transform;
-  animation: marquee-scroll 25s linear infinite;
 }
 
-.marquee-track:hover {
+.marquee__item {
+  display: inline-block;
+  flex-shrink: 0;
+  white-space: nowrap;
+  padding: 0 2rem;
+  will-change: transform;
+  animation: marquee-scroll 15s linear infinite;
+}
+
+.marquee:hover .marquee__item {
   animation-play-state: paused;
 }
 
-.marquee-group {
-  display: flex;
-  flex-shrink: 0;
-  align-items: center;
-  white-space: nowrap;
-}
-
-.marquee-text {
-  font-family: var(--font-hand);
-  display: inline-block;
-  flex-shrink: 0;
-  padding: 0 1rem;
+.marquee__item-text {
   color: var(--warm-white);
   opacity: 0.85;
 }
 
-.marquee-separator {
-  flex-shrink: 0;
-  margin: 0 2rem;
-  color: var(--accent-cream);
-  user-select: none;
+@keyframes marquee-scroll {
+  from {
+    transform: translateX(0%);
+  }
+  to {
+    transform: translateX(-100%);
+  }
 }
 
 /* Scissors "cutting" icon at the start of the marquee */
@@ -1765,24 +1792,14 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
+  width: 60px;
   height: 100%;
   background: linear-gradient(to right, var(--charcoal-light) 60%, transparent);
   pointer-events: none;
 }
 
-.marquee-scissors svg {
+.marquee-scissors img {
   animation: scissors-cut 1s ease-in-out infinite;
-}
-
-@keyframes marquee-scroll {
-  0% {
-    transform: translate3d(0, 0, 0);
-  }
-
-  100% {
-    transform: translate3d(-50%, 0, 0);
-  }
 }
 
 @keyframes scissors-cut {
@@ -1838,7 +1855,7 @@ body {
   }
 
   .feature-icon {
-    display: none;
+    opacity: 0.5;
   }
 
   .scissors-icon {
