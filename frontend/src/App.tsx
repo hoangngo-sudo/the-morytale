@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { Routes, Route, Navigate } from 'react-router-dom'
 import LandingPage from './pages/LandingPage.tsx'
 import StoryPage from './pages/StoryPage.tsx'
 import ExpandedStoryView from './pages/ExpandedStoryView.tsx'
@@ -14,11 +14,25 @@ import AuthGuard from './components/AuthGuard/AuthGuard.tsx'
 import DailyUpdateToast from './components/DailyUpdateToast/DailyUpdateToast.tsx'
 import { useAuthStore } from './store/authStore.ts'
 
+import { useEffect } from 'react'
+import { useSearchParams } from 'react-router-dom'
+
 function App() {
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated)
+  const login = useAuthStore((s) => s.login)
+  const [searchParams, setSearchParams] = useSearchParams()
+
+  useEffect(() => {
+    const token = searchParams.get('token')
+    if (token) {
+        login(token)
+        // Clean up URL
+        setSearchParams({})
+    }
+  }, [searchParams, login, setSearchParams])
 
   return (
-    <BrowserRouter>
+    <>
       <Routes>
         {/* Public */}
         <Route path="/" element={<LandingPage />} />
@@ -41,7 +55,7 @@ function App() {
       </Routes>
 
       <DailyUpdateToast show={isAuthenticated} />
-    </BrowserRouter>
+    </>
   )
 }
 
