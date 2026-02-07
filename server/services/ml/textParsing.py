@@ -21,6 +21,7 @@ def getEmbedding(text: str):
     Returns:
         dict with "text" and "embedding" keys
     """
+    # generate embedding
     embedding = client.models.embed_content(
         model="gemini-embedding-001",
         contents=text
@@ -28,45 +29,12 @@ def getEmbedding(text: str):
 
     return {
         "text": text,
-        "embedding": embedding.embeddings[0].values
+        "embedding": list(embedding.embeddings[0].values)
     }
 
 
-def multipleEmbeddings(texts: list[str]):
-    """
-    Generate embeddings for a list of text inputs.
-    
-    Args:
-        texts: List of text strings to embed
-    
-    Returns:
-        List of dicts with "text" and "embedding" keys
-    """
-    results = []
-
-    print(f"Processing {len(texts)} texts")
-
-    for i, text in enumerate(texts):
-        print(f"Processing [{i + 1}/{len(texts)}]: {text[:50]}...")
-        try:
-            result = getEmbedding(text)
-            results.append(result)
-        except Exception as e:
-            print(f"Error processing text {i + 1}: {e}")
-
-    return results
-
-
 if __name__ == "__main__":
-    # Example usage
-    sample_texts = [
-        "Had a great coffee at the new cafe downtown",
-        "Spent the afternoon studying at the library",
-        "Went for a run in the park before sunset"
-    ]
-
-    results = multipleEmbeddings(sample_texts)
-    for r in results:
-        print(f"Text: {r['text'][:50]}...")
-        print(f"Embedding length: {len(r['embedding'])}")
-        print()
+    sample_text = "Had a great coffee at the new cafe downtown"
+    results = getEmbedding(sample_text)
+    print(f"Text: {results['text']}")
+    print(f"Embedding length: {len(results['embedding'])}")
