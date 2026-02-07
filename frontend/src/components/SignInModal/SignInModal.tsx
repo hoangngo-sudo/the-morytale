@@ -37,17 +37,22 @@ function SignInModal({ isOpen, onClose }: SignInModalProps) {
     setLoading(true)
 
     try {
-        const endpoint = isSignUp ? '/auth/register' : '/auth/login'
         const { default: api } = await import('@/services/api')
         
-        const payload = isSignUp 
-            ? { username: formData.username, email: formData.email, password: formData.password }
-            : { email: formData.email, password: formData.password }
-
-        const res = await api.post(endpoint, payload)
+        const { username, email, password } = formData
+        let response
+        if (isSignUp) {
+          response = await api.register({
+            username,
+            email,
+            password,
+          })
+        } else {
+          response = await api.login({ email, password })
+        }
         
-        if (res.data.token) {
-            await login(res.data.token)
+        if (response.data.token) {
+            await login(response.data.token)
             onClose()
         }
     } catch (err: any) {

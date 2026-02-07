@@ -1,9 +1,11 @@
 import { create } from 'zustand'
+import api from '@/services/api.ts'
 import type { User } from '@/types/index.ts'
 
 interface AuthState {
   user: User | null
   isAuthenticated: boolean
+  isLoading: boolean
   login: (token: string) => Promise<boolean>
   logout: () => void
   fetchUser: () => Promise<void>
@@ -12,6 +14,7 @@ interface AuthState {
 export const useAuthStore = create<AuthState>((set) => ({
   user: null,
   isAuthenticated: false,
+  isLoading: false,
 
   login: async (token: string) => {
     localStorage.setItem('cutting-room:token', token);
@@ -31,15 +34,16 @@ export const useAuthStore = create<AuthState>((set) => ({
   },
 
   fetchUser: async () => {
+    set({ isLoading: true })
     try {
-      const { default: api } = await import('../services/api');
-      const response = await api.get('/auth/me');
-      set({ user: response.data, isAuthenticated: true });
+      const response = await api.getMe()
+      set({ user: response.data, isAuthenticated: true })
     } catch (error) {
-      console.error('Failed to fetch user:', error);
-      // If 401, logout
-      set({ user: null, isAuthenticated: false });
-      localStorage.removeItem('cutting-room:token');
+      console.error('Failed to fetch user', error)
+      localStorage.removeItem('cutting-room:token')
+      set({ user: null, isAuthenticated: false })
+    } finally {
+      set({ isLoading: false })
     }
-  }
+  },
 }))

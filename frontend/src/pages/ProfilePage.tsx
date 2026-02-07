@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import Header from '@/components/Header/Header.tsx'
@@ -9,8 +10,16 @@ function ProfilePage() {
   const { userId } = useParams<{ userId: string }>()
   const currentUser = useAuthStore((s) => s.user)
   const getTracksByOwner = useTrackStore((s) => s.getTracksByOwner)
+  const fetchTrackHistory = useTrackStore((s) => s.fetchTrackHistory)
 
   const isOwnProfile = !userId || userId === currentUser?.id
+  
+  useEffect(() => {
+    if (isOwnProfile && currentUser) {
+      fetchTrackHistory()
+    }
+  }, [isOwnProfile, currentUser, fetchTrackHistory])
+
   const profileUser = isOwnProfile
     ? currentUser
     : MOCK_USERS.find((u) => u.id === userId) ?? null
