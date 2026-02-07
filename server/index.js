@@ -30,12 +30,16 @@ const nodeRoutes = require('./routes/nodeRoutes');
 const trackRoutes = require('./routes/trackRoutes');
 const userRoutes = require('./routes/userRoutes');
 const itemRoutes = require('./routes/itemRoutes');
+const notificationRoutes = require('./routes/notificationRoutes');
+// const demoRoutes = require('./routes/demoRoutes');
 
 app.use('/api/auth', authRoutes);
 app.use('/api/nodes', nodeRoutes);
 app.use('/api/tracks', trackRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/items', itemRoutes);
+app.use('/api/notifications', notificationRoutes);
+// app.use('/api/demo', demoRoutes);  // Demo — no auth required
 
 
 // Database Connection
