@@ -1,193 +1,308 @@
 # THE CUTTING ROOM
-## A communal wall of rejected work where narrative emerges from collective fragments
+## A communal wall of rejected work where the wall itself becomes the narrator
 
 ---
 
-## Concept
+## Core Idea
 
-The Cutting Room is an interactive storytelling application built around a simple premise:
+The Cutting Room is an interactive storytelling application where users upload abandoned photos and unfinished text. Instead of highlighting individual posts, the system analyzes the *collection as a whole* and produces a narrative describing what the community is collectively revealing.
 
-Instead of sharing what we are proud of, users share what they abandoned.
+The narrative is not about any one person.
 
-People upload discarded photos and unfinished text. The system does not judge individual contributions. Instead, an AI curator analyzes the collection as a whole and discovers patterns — clustering fragments and writing interpretive “wall notes” explaining what the community seems to be unconsciously creating.
+The narrative is about the wall.
 
-The story is not written by authors.
-The story emerges from collective behavior.
+As fragments accumulate, the wall develops a voice, a mood, and eventually a character. Users are not reading a story — they are inside a system that gradually tells a story about them.
 
-This transforms users into participants inside a living narrative environment.
+Early:
+“These fragments avoid faces.”
+
+Later:
+“This wall keeps cutting away when things get personal.”
+
+Later:
+“No one here wants to be seen.”
+
+The story emerges from behavioral patterns.
 
 ---
 
-## Core Experience
+## User Experience
 
-Users interact with a shared Wall.
-
-They can:
+Users can:
 - upload an abandoned photo
 - upload unfinished text
-- optionally describe why they cut it
-- later “claim” a fragment to connect it to their profile
+- optionally add a one-sentence “why I cut this”
+- anonymously contribute to the wall
+- later claim a fragment on their personal profile
 
-The system then:
-1. extracts meaning from fragments using embeddings
-2. groups similar fragments together
-3. generates a curator-style narrative interpretation
-4. assigns an ambient music mood to the cluster
+The system:
+1. extracts semantic meaning
+2. groups fragments
+3. analyzes behavioral patterns
+4. generates evolving narrative
+5. assigns a music mood
 
-The result feels closer to walking through a gallery installation than browsing a social feed.
+The wall updates over time, so the story unfolds across days rather than instantly.
 
 ---
 
-## Social Design
+## Social Structure
 
-We intentionally avoid standard social media dynamics.
+### Community Focus
+- Each user can follow up to 40 friends
+- Small social circles encourage honesty
+- Prevents influencer dynamics
 
-### Community-first
-- Each user may follow up to 40 friends
-- This keeps the network intimate
-- Encourages honesty instead of performance
-
-### Dual Identity
+### Dual Identity System
 
 Community Wall
-anonymous fragments contribute to narrative
+- anonymous contribution
+- feeds narrative engine
 
 Personal Studio
-users can claim fragments and show finished work
+- claimed fragments
+- comments and discussion
+- visible identity
 
-A fragment can be posted anonymously to the wall, then later claimed if the user wants authorship.
-
-This encourages participation without fear while still allowing engagement.
+Users can first post safely, then reveal authorship later.
 
 ### Engagement Features
-To keep activity alive:
 - likes
 - comments
 - following
 - notifications
 
-Likes apply to fragments and clusters, but discovery centers around the shared wall rather than individual profiles.
+Engagement exists, but the primary object is the *wall*, not the profile.
 
 ---
 
-## Features
+## System Overview
 
-### Wall
-- spatial grid layout
-- live cluster grouping
-- cluster notes written by AI
-- optional background music mood
-
-### Clusters
-Each grouping includes:
-- cluster title
-- AI curator wall note
-- recommended music genre
-- optional randomly selected track
-
-Example wall note:
-
-“These fragments stop at the moment before human connection — hands cropped, conversations unfinished, faces turned away.”
-
-Music mood: ambient piano
+Fragments
+   ↓
+Embeddings
+   ↓
+Dynamic Clustering
+   ↓
+Cluster Feature Extraction
+   ↓
+Cluster Relationship Graph
+   ↓
+Narrative State Engine
+   ↓
+LLM Story Generation
+   ↓
+Wall Narrative + Music Mood
 
 ---
 
-## Technical Architecture
-
-### Stack (Hackathon-Friendly)
+## Technical Stack
 
 Frontend
-- React (MERN stack)
+- React (MERN)
 - Bootstrap
-- Masonry grid library (for wall layout)
+- Masonry / grid layout library
 
 Backend
-- Node.js
-- Express.js REST API
+- Node.js + Express API
 
 Database
 - MongoDB Atlas
 
-Media Storage
-- Cloudflare R2 (image storage)
+Image Storage
+- Cloudflare R2
 
 Deployment
 - aedify.ai
+
+ML Services
+- Embedding API
+- LLM API
 
 ---
 
 ## AI Pipeline
 
-We do not train models. We orchestrate existing ones.
+We orchestrate existing models rather than training our own.
 
-### Step 1 — Content Intake
-User uploads image or text.
+---
 
-Images are stored in Cloudflare R2.
-Metadata is stored in MongoDB.
+### Step 1 — Upload
+
+User uploads:
+- photo OR text
+
+Images stored in Cloudflare R2  
+Metadata stored in MongoDB
 
 ---
 
 ### Step 2 — Embedding Extraction
 
-We generate semantic vectors for each fragment.
+Each fragment is converted into a semantic vector.
 
-Text → embedding model
-Image → image caption → embedding model
+Text:
+embedding(text)
 
-Each fragment becomes a vector representation of meaning.
+Image:
+caption(image) → embedding(caption)
 
-fragment → embedding vector → stored in MongoDB
+The embedding represents meaning rather than pixels.
+
+Stored in MongoDB:
+fragment.embedding = [vector]
 
 ---
 
-### Step 3 — Clustering (K-Means)
+### Step 3 — Dynamic Clustering
 
-We periodically run clustering:
+Instead of fixed groups, clusters adapt over time.
 
+Process:
 1. fetch all embeddings
 2. normalize vectors
-3. run K-Means (k = 3–6 depending on fragment count)
-4. assign cluster_id to each fragment
+3. run clustering algorithm
 
-This produces emergent thematic groups.
-
----
-
-### Step 4 — Cluster Interpretation (AI Curator)
-
-For each cluster:
-
-1. sample ~10 fragments
-2. generate captions (for images)
-3. summarize shared themes
-4. send to LLM for interpretation
-
-Curator prompt style:
-
-You are a museum curator.
-Write a short interpretive wall label explaining the pattern connecting these works.
-Be tentative and reflective, not authoritative.
-Do not describe individual items; describe the shared behavior.
+Options:
+- KMeans with adaptive K (silhouette scoring)
+OR
+- Agglomerative clustering (preferred hackathon solution)
 
 Output:
-- wall note
-- short title
+Cluster IDs assigned to fragments.
+
+Clusters update periodically (ex: every 20 uploads).
 
 ---
 
-### Step 5 — Music Mood Generation
+### Step 4 — Cluster Feature Extraction
 
-We also generate:
-- a music genre or mood (ambient, lo-fi, piano, city noise, etc.)
-- optionally attach a random track from a predefined list
+Each cluster becomes a behavioral object.
 
-This reinforces emotional immersion.
+We compute:
+
+size
+growth rate
+variance
+average brightness (images)
+face ratio (optional)
+abandonment stage metadata
+time-of-day upload pattern
+
+Example:
+
+Cluster C1:
+{
+  size: 27,
+  brightness_avg: low,
+  face_ratio: 0.08,
+  growth_delta: +9,
+  variance: 0.15
+}
+
+Now clusters have traits, not just similarity.
 
 ---
 
-## Database Design (MongoDB)
+### Step 5 — Cluster Relationship Graph
+
+We compare cluster centroids.
+
+edge_weight = cosine_similarity(Ci, Cj)
+
+This allows detection of:
+- clusters merging
+- clusters separating
+- dominant clusters
+- emerging clusters
+
+We also track:
+- shared users
+- temporal growth
+
+No heavy graph ML required — simple math.
+
+---
+
+### Step 6 — Narrative State Engine
+
+This is the core storytelling logic.
+
+We do NOT generate text directly from fragments.
+
+We generate a structured narrative state.
+
+NarrativeState {
+    dominant_cluster
+    emerging_cluster
+    suppressed_cluster
+    tension_score
+    theme_label
+}
+
+Example rules:
+
+If a cluster > 40% of fragments:
+→ dominant cluster
+
+If cluster growth rapidly increases:
+→ emerging cluster
+
+If dominant cluster has low face visibility:
+→ theme = avoidance
+
+If two clusters move closer:
+→ state = convergence
+
+This produces an interpretable behavioral summary.
+
+---
+
+### Step 7 — Story Generation (LLM)
+
+We feed the narrative state to an LLM.
+
+Prompt structure:
+
+You are the voice of a wall observing collective behavior.
+Write 2–3 sentences describing what the wall is becoming.
+Be reflective, not certain.
+No advice, no positivity bias.
+
+Input:
+
+Dominant cluster:
+- dark images
+- no faces
+- rapidly growing
+
+Emerging cluster:
+- bright outdoor scenes
+
+State: converging
+
+Output:
+
+“The wall is split between retreat and exposure.
+What avoids faces now sits beside open air.
+Something here is deciding whether to hide or be seen.”
+
+---
+
+### Step 8 — Music Mood Assignment
+
+Based on theme_label we assign a mood:
+
+avoidance → ambient piano  
+nostalgia → tape hiss / lo-fi  
+exposure → outdoor ambience
+
+Optional:
+Attach a random track from a predefined library.
+
+---
+
+## Database Schema
 
 Users
 _id
@@ -211,11 +326,23 @@ cut_reason (optional)
 
 Clusters
 _id
-title
+centroid[]
+size
+growth_rate
+variance
+theme_label
 wall_note
 music_mood
-track_id (optional)
 updated_at
+
+NarrativeStates
+_id
+dominant_cluster
+emerging_cluster
+tension_score
+theme_label
+generated_story
+timestamp
 
 Comments
 _id
@@ -234,102 +361,64 @@ target_type (fragment | cluster)
 
 ## Claiming Mechanic
 
-Users can retroactively claim a fragment.
+A user can later claim a fragment they uploaded anonymously.
 
 Effects:
 - attaches fragment to profile
+- unlocks discussion
 - increases engagement
-- encourages posting without fear
 
-This solves the hesitation problem and encourages participation.
+This encourages honest posting while preserving community interaction.
 
 ---
 
-## UI / Design Direction
+## Visual Design
 
 Light theme only.
 
-Goals:
-- warm
-- approachable
-- not futuristic
+The app should feel:
+not high-tech
+not futuristic
+not corporate
 
-Visual style:
-- soft beige or cream background
-- pinned paper cards
-- slightly imperfect borders
-- handwritten style accents
-- corkboard inspiration
+Design language:
+- corkboard aesthetic
+- pinned cards
+- soft beige backgrounds
+- imperfect borders
+- handwritten accents
 
-The application should feel like a studio wall, not a tech platform.
-
----
-
-## How to Run (Development)
-
-1. Clone
-git clone <repo>
-cd cutting-room
-
-2. Backend
-cd server
-npm install
-npm run dev
-
-3. Frontend
-cd client
-npm install
-npm start
-
-4. Environment Variables
-Create .env
-
-MONGODB_URI=
-R2_ACCESS_KEY=
-R2_SECRET_KEY=
-R2_BUCKET=
-EMBEDDING_API_KEY=
-LLM_API_KEY=
+Goal: a studio wall, not a platform.
 
 ---
 
-## Demo Flow (Important for Judges)
+## Demo Flow (For Judges)
 
-1. Upload fragments
-2. Show anonymous wall
-3. Trigger clustering
-4. Reveal generated wall note
-5. Play cluster music
-6. Claim a fragment
-7. Show personal studio
+1. Show empty wall
+2. Upload fragments
+3. Show clustering
+4. Trigger narrative update
+5. Reveal wall voice
+6. Play music mood
+7. Claim a fragment
+8. Show profile
 
-The reveal of the cluster narrative is the emotional centerpiece of the demo.
-
----
-
-## Why This Matters
-
-Most platforms reward polished outcomes.
-
-The Cutting Room studies:
-- hesitation
-- incompletion
-- creative doubt
-
-It turns private rejection into shared narrative.
-
-The story is not written by a single author.
-The story is written by everyone accidentally.
+The emotional moment is when the wall speaks.
 
 ---
 
-## Future Work
-- audio fragments
-- evolving clusters over time
-- public installations
+## Why This Is Interactive Storytelling
+
+We are not generating stories from images.
+
+We are generating stories from **structural shifts in collective behavior**.
+
+Users influence the narrative unintentionally. The wall reacts to patterns rather than individual actions.
+
+The wall becomes a character.
 
 ---
 
-## One-Sentence Pitch
+## One Sentence Pitch
 
-The Cutting Room is a communal wall of rejected work where an AI curator groups what people throw away and discovers the story those rejections are collectively telling.
+The Cutting Room is a communal wall of discarded work where an AI observes patterns in what people abandon and slowly develops a narrative voice describing what the community is afraid to show.
