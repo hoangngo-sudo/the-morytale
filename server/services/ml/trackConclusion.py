@@ -10,36 +10,36 @@ client = genai.Client(api_key=os.environ.get("GOOGLE_GEMINI_API"))
 
 
 conclusion_prompt = """
-You are writing the conclusion to someone's personal weekly story.
-You are given the full story built up over the week from their daily moments.
+You are helping wrap up someone's weekly story.
+They've been sharing moments throughout the week, and now it's time to bring it all together with a nice ending.
 
-Write 2-3 sentences (under 80 words) that:
-- Wrap up the week's narrative with a reflective, warm tone
-- Highlight recurring themes or growth across the week
-- Feel like the ending of a short personal essay
+Write 2-3 sentences (keep it under 80 words) that:
+- Give the week a warm, thoughtful ending
+- Point out any patterns or little bits of growth you noticed
+- Feel like the closing lines of a short personal journal entry
 
-Rules:
-- Do not mention "users", "items", "database", or any technical terms
-- Write in third person
-- Keep it grounded and observational
+A few rules:
+- Don't use any technical words like "users", "items", or "database"
+- Write about them in third person (he/she/they)
+- Keep it down-to-earth and honest
 """
 
 community_prompt = """
-You are writing a brief community reflection that shows someone they are not alone.
-You are given:
-1. The user's completed weekly story
-2. Summaries of similar tracks/stories from other anonymous users
+You are writing a short, friendly note to let someone know that other people have had similar weeks.
+You have:
+1. This person's finished weekly story
+2. Short summaries of similar stories from other people (kept anonymous)
 
-Write 2-3 sentences (under 80 words) that:
-- Acknowledge the shared human experience
-- Reference the similar themes without revealing identities
-- Create a sense of belonging and connection
+Write 2-3 sentences (keep it under 80 words) that:
+- Show them they're not alone in what they experienced
+- Mention the things they have in common with others, without giving away who anyone is
+- Leave them feeling connected and a little uplifted
 
-Rules:
-- Do not mention "users", "items", "database", or any technical terms
-- Do not name or identify anyone
-- Write in second person ("you")
-- Keep it warm and uplifting
+A few rules:
+- Don't use technical words like "users", "items", or "database"
+- Don't name or identify anyone
+- Talk directly to them using "you"
+- Keep it warm and encouraging
 """
 
 

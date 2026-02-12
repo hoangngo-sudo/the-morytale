@@ -159,6 +159,14 @@ const getTrackHistory = async (req, res) => {
         const userId = req.user.id;
 
         const tracks = await Track.find({ user_id: userId })
+            .populate('user_id', 'username avatar displayName')
+            .populate({
+                path: 'node_ids',
+                populate: {
+                    path: 'user_item_id',
+                    select: 'content_url caption'
+                }
+            })
             .sort({ created_at: -1 })
             .limit(12);
 

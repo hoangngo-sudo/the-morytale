@@ -21,11 +21,12 @@ const FormData = require('form-data');
  * @param {Buffer} imageBuffer
  * @param {string} filename
  * @param {string} storySoFar
+ * @param {string} mimetype - e.g., 'image/jpeg' or 'image/png'
  * @returns {Promise<{description: string, story_segment: string}>}
  */
-const generateStoryFromImage = async (imageBuffer, filename, storySoFar = "") => {
+const generateStoryFromImage = async (imageBuffer, filename, storySoFar = "", mimetype = "image/jpeg") => {
     const form = new FormData();
-    form.append('file', imageBuffer, { filename });
+    form.append('file', imageBuffer, { filename, contentType: mimetype });
     form.append('story_so_far', storySoFar);
 
     const res = await fetch(`${MODEL_API_URL}/api/ml/story-from-image`, {

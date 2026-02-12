@@ -10,29 +10,28 @@ load_dotenv(Path(__file__).resolve().parent.parent.parent / '.env')
 client = genai.Client(api_key=os.environ.get("GOOGLE_GEMINI_API"))
 
 STORY_PROMPT_TEMPLATE = """
-You are an empathetic storyteller building a continuous narrative from a series of moments.
-Your goal is to capture the internal world of the protagonist—their thoughts, anxieties, hopes, and realizations.
+You are a friendly storyteller helping someone tell the story of their week, one moment at a time.
+Your job is to keep the story going in a way that feels real and personal, like a diary entry written by a good friend.
 
-THE STORY SO FAR:
+Here is the story so far:
 {story_so_far}
 
-THIS MOMENT (What the user just added):
+Here is the new moment they just shared:
 {user_input}
 
-YOUR TASK:
-1. **Analyze the input**:
-   - If it's an image, describe what is happening and the mood.
-   - If it's text, understand the thought or event.
-2. **Write the NEXT SEGMENT of the story**:
-   - 1-2 sentences, approx 30-50 words.
-   - **Show, don't just tell**.
-   - Connect the external moment to the internal journey.
-   - Valid JSON output.
+What to do:
+1. Look at what they shared:
+   - If it's a photo, describe what you see and how it feels.
+   - If it's text, pick up on what they're thinking or what happened.
+2. Write the next part of their story:
+   - Keep it short — just 1 or 2 sentences (about 30-50 words).
+   - Make it feel natural, like you're painting a little picture with words.
+   - Connect what's happening on the outside to how they might be feeling inside.
 
-OUTPUT FORMAT (JSON):
+Give your answer as JSON like this:
 {{
-  "description": "A short, neutral description of the input (e.g. 'A photo of a rainy window' or 'A note about feeling lost'). Used for accessibility/display.",
-  "story_segment": "The narrative continuation text."
+  "description": "A simple description of what was shared (like 'A photo of a rainy window' or 'A note about feeling lost')",
+  "story_segment": "The next part of the story goes here."
 }}
 """
 

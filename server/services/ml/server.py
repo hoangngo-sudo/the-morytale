@@ -13,7 +13,6 @@ from trackConclusion import generate_conclusion, generate_community_reflection
 app = FastAPI(title="Cutting Room ML Service")
 
 
-# ─── Pure ML Endpoints ───────────────────────────────────────────
 # These endpoints do ML work ONLY. No database writes, no track/node
 # management. The Node.js server handles all orchestration.
 
@@ -24,15 +23,13 @@ async def story_from_image_endpoint(
     story_so_far: str = Form("")
 ):
     """Generate story segment directly from image."""
-    # ─── Mime Type Check ───
-    # Basic check, though simple extensions also work.
-    if file.content_type not in ["image/jpeg", "image/png", "image/jpg"]:
+    # Accept any image format
+    if not file.content_type or not file.content_type.startswith("image/"):
          raise HTTPException(
             status_code=400,
-            detail=f"Unsupported image format '{file.content_type}'. Only JPEG and PNG are accepted."
+            detail=f"Invalid file type '{file.content_type}'. Only image files are accepted."
         )
 
-    # Read bytes directly
     image_bytes = await file.read()
 
     try:

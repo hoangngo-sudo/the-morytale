@@ -4,7 +4,7 @@ const Track = require('../models/Track');
 const modelApi = require('../services/modelApi');
 const { uploadFile } = require('../services/r2Storage');
 
-const DAILY_POST_LIMIT = 3;
+const DAILY_POST_LIMIT = 30;
 const TRACK_NODE_LIMIT = 10;
 const TRACK_MAX_AGE_DAYS = 7;
 
@@ -231,11 +231,10 @@ const createItem = async (req, res) => {
 
         if (content_type === 'image') {
             if (files[0]) {
-                // Validate MIME type
-                const allowedMimes = ['image/jpeg', 'image/png'];
-                if (!allowedMimes.includes(files[0].mimetype)) {
+                // Validate MIME type - accept any image format
+                if (!files[0].mimetype.startsWith('image/')) {
                     return res.status(400).json({
-                        message: `Unsupported image format '${files[0].mimetype}'. Only JPEG and PNG are accepted.`
+                        message: `Invalid file type '${files[0].mimetype}'. Only image files are accepted.`
                     });
                 }
 
@@ -247,7 +246,8 @@ const createItem = async (req, res) => {
                     const mlResult = await modelApi.generateStoryFromImage(
                         files[0].buffer,
                         files[0].originalname,
-                        storySoFar
+                        storySoFar,
+                        files[0].mimetype
                     );
                     finalDescription = mlResult.description;
                     storySegment = mlResult.story_segment;
