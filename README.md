@@ -1,4 +1,4 @@
-<img width="115" height="130" alt="image" src="https://github.com/user-attachments/assets/26ef9ab2-90b0-4731-9ea5-009db7be80dc" />
+<img width="80" height="147" alt="Image" src="https://github.com/user-attachments/assets/9a4d531c-71ec-41a6-846d-e85d5aedf7b8" style="max-width: 100%; height: auto;"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 <img width="162" height="130" alt="Image" src="https://github.com/user-attachments/assets/03e2b12c-d610-4cd6-af97-fcda5ef6e35e" />
 
 **SPARKHACKS 2026**
@@ -7,7 +7,7 @@
 
 *where random moments strike into untold narrative masterpieces...*
 
-**Track 02: Narrative & Interactive Experience**
+**Track 02: Narrative storytelling in  an interactive application**
 
 > Morytale transforms weekly digital moments into a living narrative using generative AI, helping users discover the story hidden inside their everyday life.
 
@@ -36,12 +36,12 @@
 
 ## Team
 
-| Name | Email |
-|------|-------|
-| Viet Thai Nguyen | vnguy87@uic.edu |
-| Han Dang | ldang7@uic.edu |
-| Minh Khoa Cao | mcao@uic.edu |
-| Hoang Minh Ngo | mngo@uic.edu |
+| Name | Email | Github |
+|------|-------|-------|
+| Viet Thai Nguyen | vnguy87@uic.edu | [@AlgoriThai07](https://github.com/AlgoriThai07) |
+| Han Dang | ldang7@uic.edu | [@ghandle18](https://github.com/ghandle18) |  
+| Minh Khoa Cao | mcao@uic.edu | [@cmkhoa](https://github.com/cmkhoa) |
+| Hoang Minh Ngo | mngo@uic.edu | [@hoangngo-sudo](https://github.com/hoangngo-sudo) |
 
 ---
 
@@ -65,7 +65,7 @@ Morytale introduces **Weekly Tracks** — instead of a feed, users build a conne
 
 Each post (**Node**) contains:
 - One photo **or** one text entry
-- An optional caption (max 90 characters)
+- An optional caption
 - An AI-generated story segment that weaves the moment into the week's narrative
 
 At **the end of each week**, the system generates:
@@ -79,7 +79,7 @@ The result is an interactive narrative shaped by real user behavior.
 ## Key Features
 
 ### 1. Intentional Posting Design
-- 3 posts per day limit
+- 30 posts per day limit (for demo, but usually we will stick with only 10 posts per day)
 - 20 friend cap
 - Weekly reset cycle
 
@@ -124,7 +124,7 @@ Express API (Node.js, port 5000)
   (image storage)  (story generation)
 ```
 
-The Express API handles all orchestration — item storage, node/track management, daily limits, and auto-conclude logic. The Python ML service is a **stateless worker** that only performs AI generation tasks.
+The Express API handles all orchestration, which includes item storage, node/track management, daily limits, and auto-conclude logic. The Python ML service is a **stateless worker** that only performs AI generation tasks.
 
 ---
 
@@ -382,86 +382,61 @@ docker run -p 5000:5000 --env-file server/.env morytale
 ## Demo Screenshots
 
 <details>
-<summary><strong>Click to open demo screenshots</strong></summary>
-
-  <details>
-    <summary><strong>Login</strong></summary>
-    <br>
-    <img width="1436" height="954" alt="image" src="https://github.com/user-attachments/assets/08d02b30-79ee-49d1-9ed8-83c9c59b1194" />
-    <br>
-  </details>
-
-  <details>
-    <summary><strong>Navigation Bar</strong></summary>
-    <br>
-    <img width="332" height="582" alt="image" src="https://github.com/user-attachments/assets/efc003b6-14b6-4d6d-8949-106e7e3e7456" />
-    <br>
-  </details>
-
-  <details>
-    <summary><strong>Pic Upload Pipeline</strong></summary>
-    <br>
-    <img width="1840" height="1456" alt="image" src="https://github.com/user-attachments/assets/4bc15185-559e-4ed3-a69e-270403802835" />
-    <br>
-  </details>
-
-  <details>
-    <summary><strong>Add Pic & Text Pop up</strong></summary>
-    <br>
-    <img width="1858" height="1178" alt="image" src="https://github.com/user-attachments/assets/b7207364-fade-4d36-ab74-bed9d87e1fb2" />
-    <br>
-  </details>
-
-  <details>
-    <summary><strong>Finishing Pipeline - Reflection & Generative Narrative</strong></summary>
-    <br>
-    <img width="1970" height="1370" alt="image" src="https://github.com/user-attachments/assets/06c58eca-f8b8-459e-ac4d-3d3a25c67693" />
-    <br>
-  </details>
-
-  <details>
-    <summary><strong>Top 4 Similar Narratives</strong></summary>
-    <br>
-    <img width="1574" height="1348" alt="image" src="https://github.com/user-attachments/assets/be56f7cf-465b-4451-98fd-7311759cc646" />
-    <br>
-  </details>
-
-  <details>
-    <summary><strong>Friend List</strong></summary>
-    <br>
-    <img width="1594" height="1352" alt="image" src="https://github.com/user-attachments/assets/2bb3c311-b39a-4fd6-bd26-1a5b1a04af86" />
-    <br>
-  </details>
-
-  <details>
-    <summary><strong>Account Owner Profile Layout</strong></summary>
-    <br>
-    <img width="1204" height="1142" alt="image" src="https://github.com/user-attachments/assets/970aecfc-1eb1-4f72-b057-08929a06cb7f" />
-    <br>
-  </details>
-
-  <details>
-    <summary><strong>Friend/Other Users' Profile Layout</strong></summary>
-    <br>
-    <img width="1618" height="1370" alt="image" src="https://github.com/user-attachments/assets/86b8e892-9dd8-4053-af68-4392cd57c8aa" />
-    <br>
-  </details>
-
-  <details>
-    <summary><strong>Track Detailed View Layout</strong></summary>
-    <br>
-    <img width="1254" height="500" alt="image" src="https://github.com/user-attachments/assets/42941f16-63e0-4104-b025-3b21f0ae8943" />
-    <br>
-  </details>
+       <summary><strong>Click to open demo screenshots</strong></summary>
+       <img width="1867" height="970" alt="Image" src="https://github.com/user-attachments/assets/deb0744c-0873-411b-be95-806e67e538fb" />
+       <details>
+              <img width="1867" height="968" alt="Image" src="https://github.com/user-attachments/assets/4000a655-fb57-4d59-aa73-ac3e252cd2ba" />
+       </details>
+       <details>
+              <img width="1868" height="968" alt="Image" src="https://github.com/user-attachments/assets/37734d45-7fa8-4557-8da9-2d342fd03e80" />
+       </details>
+       <details>
+              <img width="1865" height="965" alt="Image" src="https://github.com/user-attachments/assets/f2fb82e6-1fe4-4dbf-b62a-4400db41c213" />
+       </details>
+       <details>
+              <img width="1865" height="965" alt="Image" src="https://github.com/user-attachments/assets/a230be71-cf04-427c-8c82-078a4c6969e2" />
+       </details>
+       <details>
+              <img width="1867" height="963" alt="Image" src="https://github.com/user-attachments/assets/eb295cff-b806-458c-95ea-1e833fcc8252" />
+       </details>
+       <details>
+              <img width="1866" height="968" alt="Image" src="https://github.com/user-attachments/assets/5d90e774-b108-4605-afbe-7ddc2218ea81" />
+       </details>
+       <details>
+              <img width="1863" height="961" alt="Image" src="https://github.com/user-attachments/assets/0d4fa3b5-bfa1-4431-9995-4e37560dc6e1" />
+       </details>
+       <details>
+       <img width="1863" height="965" alt="Image" src="https://github.com/user-attachments/assets/04ceac32-2129-41ee-9762-f415517c6ab4" />
+       </details>
+       <details>
+              <img width="1866" height="965" alt="Image" src="https://github.com/user-attachments/assets/f7c9d294-eda8-47ab-9f7e-fc69d39bd0d0" />
+       </details>
+       <details>
+              <img width="1863" height="967" alt="Image" src="https://github.com/user-attachments/assets/82980687-013d-4f50-a4a2-e94613590b42" />
+       </details>
+       <details>
+              <img width="1866" height="965" alt="Image" src="https://github.com/user-attachments/assets/c89f63e9-b2ff-43bc-81db-ed2d4fb60e3c" />
+       </details>
+       <details>
+              <img width="1866" height="961" alt="Image" src="https://github.com/user-attachments/assets/dadc6718-819a-447f-a905-0cfe1059a1d0" />
+       </details>
+       <details>
+              <img width="1865" height="965" alt="Image" src="https://github.com/user-attachments/assets/feeaddce-6eaf-4018-94e9-6d57be154314" />
+       </details>
+       <details>
+              <img width="1867" height="961" alt="Image" src="https://github.com/user-attachments/assets/7e265a04-9b39-491d-8751-10eb4acc9ba1" />
+       </details>
+       <details>
+              <img width="1866" height="965" alt="Image" src="https://github.com/user-attachments/assets/5748a77b-79ec-4e46-8029-deebaf9abe86" />
+       </details>
 </details>
 
 ---
 
 ## Operation Logic
+<img width="972" height="1096" alt="image" src="https://github.com/user-attachments/assets/5200f60e-5041-4fa0-9a04-5f04cf802e65" /><br>
 
-<img width="1560" height="1034" alt="image" src="https://github.com/user-attachments/assets/8e774a1b-c943-4abe-85cb-bf6151e01998" />
-
-<img width="972" height="1096" alt="image" src="https://github.com/user-attachments/assets/5200f60e-5041-4fa0-9a04-5f04cf802e65" />
+[@Figma Link](https://www.figma.com/board/cSuav0RHsDQbNt26FuRQ0H/SH26---The-Cutting-Room-Ideation-Board?node-id=0-1&t=8osmz0hyamvbW3RM-1)
 
 ---
 
