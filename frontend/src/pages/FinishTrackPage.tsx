@@ -1,5 +1,4 @@
 import { useNavigate } from 'react-router-dom'
-import { motion } from 'framer-motion'
 import Header from '@/components/Header/Header.tsx'
 import { useTrackStore } from '@/store/trackStore.ts'
 
@@ -45,13 +44,9 @@ function FinishTrackPage() {
 
         <div className="finish-track-grid">
           {track.nodes.map((node, i) => (
-            <motion.div
+            <div
               key={node.id}
               className="collage-card"
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-50px' }}
-              transition={{ duration: 0.5, delay: i * 0.05 }}
             >
               <img
                 src={node.src}
@@ -63,19 +58,15 @@ function FinishTrackPage() {
               <span className="finish-track-pic-label font-hand fs-xs">
                 Pic #{String(i + 1).padStart(2, '0')}
               </span>
-            </motion.div>
+            </div>
           ))}
 
           {Array.from({ length: Math.max(0, 10 - track.nodes.length) }).map((_, i) => (
-            <motion.div
+            <div
               key={`empty-${i}`}
               className="collage-card"
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4 }}
             >
-            </motion.div>
+            </div>
           ))}
         </div>
 

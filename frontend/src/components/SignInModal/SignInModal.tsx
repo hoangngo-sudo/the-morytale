@@ -1,23 +1,10 @@
 import { useCallback, useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
 import { useAuthStore } from '@/store/authStore.ts'
 
 interface SignInModalProps {
   isOpen: boolean
   onClose: () => void
 }
-
-const overlayVariants = {
-  hidden: { opacity: 0 },
-  visible: { opacity: 1 },
-} as const
-
-const panelVariants = {
-  hidden: { opacity: 0, y: 24, scale: 0.97 },
-  visible: { opacity: 1, y: 0, scale: 1 },
-} as const
-
-/* ── Hoisted static elements (rendering-hoist-jsx) ── */
 
 const googleIcon = (
   <svg width="18" height="18" viewBox="0 0 48 48" aria-hidden="true">
@@ -65,7 +52,6 @@ function SignInModal({ isOpen, onClose }: SignInModalProps) {
       if (response.data.token) {
         await login(response.data.token)
         onClose()
-        // Redirect to story page as requested
         window.location.href = '/story'
       }
     } catch (err: any) {
@@ -78,23 +64,11 @@ function SignInModal({ isOpen, onClose }: SignInModalProps) {
   if (!isOpen) return null
 
   return (
-    <AnimatePresence>
-      <motion.div
-        className="signin-modal-overlay"
-        variants={overlayVariants}
-        initial="hidden"
-        animate="visible"
-        exit="hidden"
-        transition={{ duration: 0.2 }}
-        onClick={handleOverlayClick}
-      >
-        <motion.div
-          className="signin-modal-panel"
-          variants={panelVariants}
-          initial="hidden"
-          animate="visible"
-          exit="hidden"
-        >
+    <div
+      className="signin-modal-overlay"
+      onClick={handleOverlayClick}
+    >
+      <div className="signin-modal-panel">
           <button className="signin-modal-close" onClick={onClose}>&times;</button>
 
           <h2 className="signin-modal-title font-hand">
@@ -136,7 +110,7 @@ function SignInModal({ isOpen, onClose }: SignInModalProps) {
           </form>
 
           <div className="signin-divider">
-            <span>OR</span>
+            <span>or</span>
           </div>
 
           <button
@@ -153,9 +127,8 @@ function SignInModal({ isOpen, onClose }: SignInModalProps) {
               {isSignUp ? 'Sign In' : 'Sign Up'}
             </button>
           </p>
-        </motion.div>
-      </motion.div>
-    </AnimatePresence>
+      </div>
+    </div>
   )
 }
 

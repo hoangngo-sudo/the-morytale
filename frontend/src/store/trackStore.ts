@@ -28,11 +28,17 @@ const transformTrack = (backendTrack: any): Track => {
     date: node.created_at || new Date().toISOString(),
   }))
 
+  // Handle both populated user object and raw ObjectId string
+  const userId = backendTrack.user_id
+  const ownerId = typeof userId === 'object' ? (userId?._id || userId?.id) : userId
+  const ownerName = typeof userId === 'object' ? (userId?.username || 'Unknown') : 'Unknown'
+  const ownerAvatar = typeof userId === 'object' ? (userId?.avatar || '') : ''
+
   return {
     id: backendTrack._id || backendTrack.id,
-    ownerId: backendTrack.user_id?._id || backendTrack.user_id,
-    ownerName: backendTrack.user_id?.username || 'Unknown',
-    ownerAvatar: backendTrack.user_id?.avatar || '',
+    ownerId: String(ownerId || ''),
+    ownerName,
+    ownerAvatar,
     title: `Week ${backendTrack.week_id?.split('-W')[1] || '??'}`,
     weekLabel: backendTrack.week_id || 'Current Week',
     status: backendTrack.concluded ? 'completed' : 'active',
@@ -111,8 +117,9 @@ export const useTrackStore = create<TrackState>((set, get) => ({
       ...(state.currentTrack ? [state.currentTrack] : []),
       ...state.pastTracks
     ]
-    // Filter by ownerId (handling both string ID and potential object ID mismatch if any)
-    return all.filter((t) => t.ownerId === ownerId || t.ownerId === ownerId)
+    // Filter by ownerId - normalize both to strings for consistent comparison
+    const normalizedOwnerId = String(ownerId)
+    return all.filter((t) => String(t.ownerId) === normalizedOwnerId)
   },
 
   getTrackById: async (id: string) => {
@@ -155,12 +162,15 @@ export const useTrackStore = create<TrackState>((set, get) => ({
   createItem: async (formData: FormData) => {
     set({ isLoading: true })
     try {
-      await api.createItem(formData)
+      const response = await api.createItem(formData)
+      console.log('Upload successful:', response.data)
       // Refresh the track to show the new node
       await get().fetchCurrentTrack()
       return true
-    } catch (err) {
-      console.error('Failed to create item', err)
+    } catch (err: any) {
+      console.error('Failed to create item:', err)
+      console.error('Error response:', err.response?.data)
+      console.error('Error status:', err.response?.status)
       return false
     } finally {
       set({ isLoading: false })

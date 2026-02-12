@@ -1,6 +1,5 @@
 import { useRef, useCallback } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { motion } from 'framer-motion'
 import Header from '@/components/Header/Header.tsx'
 import { useTrackStore } from '@/store/trackStore.ts'
 
@@ -48,13 +47,9 @@ function MonthlyShowcasePage() {
 
           <div className="showcase-carousel" ref={carouselRef}>
             {allTracks.map((track, i) => (
-              <motion.div
+              <div
                 key={track.id}
                 className="showcase-card"
-                initial={{ opacity: 0, x: 40 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: i * 0.08 }}
               >
                 <Link to={`/tracks/${track.id}`} className="showcase-card-link">
                   <img
@@ -72,7 +67,7 @@ function MonthlyShowcasePage() {
                     <span className="profile-track-badge fs-xs">Active</span>
                   ) : null}
                 </Link>
-              </motion.div>
+              </div>
             ))}
           </div>
 

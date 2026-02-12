@@ -25,11 +25,11 @@ export interface CardImageProps {
   src: string
   alt: string
   style: {
-    scale: import('framer-motion').MotionValue<number>
-    rotate: import('framer-motion').MotionValue<number>
-    x: import('framer-motion').MotionValue<number>
-    y: import('framer-motion').MotionValue<number>
-    opacity: import('framer-motion').MotionValue<number>
+    scale: number
+    rotate: number
+    x: number
+    y: number
+    opacity: number
   }
   zIndex: number
 }

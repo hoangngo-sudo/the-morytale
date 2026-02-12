@@ -1,6 +1,5 @@
 import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { motion } from 'framer-motion'
 import Header from '@/components/Header/Header.tsx'
 import { useTrackStore } from '@/store/trackStore.ts'
 
@@ -18,21 +17,17 @@ function ExplorePage() {
 
       <div className="explore-view">
         <div className="explore-header">
-          <h2 className="font-hand fs-xxl">The Cutting Room</h2>
+          <h2 className="font-hand fs-xxl">Morytale</h2>
           <p className="explore-subtitle fs-s">
             Discover stories from the community
           </p>
         </div>
 
         <div className="explore-grid">
-          {communityTracks.map((track, i) => (
-            <motion.div
+          {communityTracks.map((track) => (
+            <div
               key={track.id}
               className="explore-card"
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-40px' }}
-              transition={{ duration: 0.5, delay: i * 0.06 }}
             >
               <Link to={`/tracks/${track.id}`} className="explore-card-image-link">
                 <img
@@ -70,7 +65,7 @@ function ExplorePage() {
                   <span>{track.commentsCount} comments</span>
                 </div>
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>

@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 import api from '../services/api'
 
-interface Notification {
+export interface Notification {
     _id: string
     type: 'like' | 'friend_request' | 'friend_accepted'
     from_user_id: {

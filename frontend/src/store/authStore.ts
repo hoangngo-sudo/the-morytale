@@ -37,7 +37,13 @@ export const useAuthStore = create<AuthState>((set) => ({
     set({ isLoading: true })
     try {
       const response = await api.getMe()
-      set({ user: response.data, isAuthenticated: true })
+      // Normalize MongoDB _id to id for frontend consistency
+      const userData = response.data
+      const normalizedUser = {
+        ...userData,
+        id: userData._id || userData.id,
+      }
+      set({ user: normalizedUser, isAuthenticated: true })
     } catch (error) {
       console.error('Failed to fetch user', error)
       localStorage.removeItem('cutting-room:token')

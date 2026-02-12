@@ -1,6 +1,5 @@
 import { useState, useCallback, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { motion } from 'framer-motion'
 import Header from '@/components/Header/Header.tsx'
 import { useAuthStore } from '@/store/authStore.ts'
 import { useTrackStore } from '@/store/trackStore.ts'
@@ -107,20 +106,11 @@ function ViewTrackPage() {
         {/* Tab content */}
         <div className="track-tab-content">
           {activeTab === 'visuals' ? (
-            <motion.div
-              className="track-visuals-grid"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.3 }}
-            >
+            <div className="track-visuals-grid">
               {track.nodes.map((node: any, i: number) => (
-                <motion.div
+                <div
                   key={node.id}
                   className="track-visual-card"
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.4, delay: i * 0.05 }}
                 >
                   <img
                     src={node.src}
@@ -129,23 +119,18 @@ function ViewTrackPage() {
                     draggable={false}
                   />
                   <p className="caption fs-xs">{node.caption}</p>
-                </motion.div>
+                </div>
               ))}
-            </motion.div>
+            </div>
           ) : (
-            <motion.div
-              className="track-written"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.3 }}
-            >
+            <div className="track-written">
               <p className="track-pinned font-hand fs-s">{track.pinnedSentence}</p>
               <div className="track-narrative">
                 {track.narrative.map((para: string, i: number) => (
                   <p key={i} className="fs-base">{para}</p>
                 ))}
               </div>
-            </motion.div>
+            </div>
           )}
         </div>
 

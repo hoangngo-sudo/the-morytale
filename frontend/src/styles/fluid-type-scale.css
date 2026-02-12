@@ -1,9 +1,9 @@
 body, h1, h2, h3, h4, h5, h6, p, li, .fluid, textarea, input, select, button, th, td {
 	--fl: 0;
-	--font-size-min: 14;
+	--font-size-min: 16;
 	--font-size-max: 20;
-	--font-ratio-min: 1.25;
-	--font-ratio-max: 1.3333333333333333;
+	--font-ratio-min: 1.0666666666666667;
+	--font-ratio-max: 1.25;
 	--font-width-min: 320;
 	--font-width-max: 1500;
 	--fluid-min: calc(var(--font-size-min) * pow(var(--font-ratio-min), var(--fl, 0)));
@@ -45,27 +45,32 @@ h6, .h6 {
 p, li, body {
 	--fl: 0;
 }
-.fs-xs{
+/* Smaller than base (negative scale) */
+.fs-xxs {
+	--fl: -2;
+}
+.fs-xs {
 	--fl: -1;
 }
-.fs-base{
+/* Base and up */
+.fs-base {
 	--fl: 0;
 }
-.fs-s{
+.fs-s {
 	--fl: 1;
 }
-.fs-m{
+.fs-m {
 	--fl: 2;
 }
-.fs-l{
+.fs-l {
 	--fl: 3;
 }
-.fs-xl{
+.fs-xl {
 	--fl: 4;
 }
-.fs-xxl{
+.fs-xxl {
 	--fl: 5;
 }
-.fs-xxxl{
+.fs-xxxl {
 	--fl: 6;
 }

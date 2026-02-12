@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { motion } from 'framer-motion'
 import Header from '@/components/Header/Header.tsx'
 import { useSocialStore } from '@/store/socialStore.ts'
 
@@ -120,17 +119,13 @@ function FriendsPage() {
         {activeTab === 'my-friends' ? (
           <div className="friends-grid">
             {friends.length === 0 ? (
-              <p className="fs-base" style={{ color: 'var(--warm-white)', opacity: 0.7, textAlign: 'center', gridColumn: '1/-1', padding: '3rem 1rem' }}>
+              <p className="friends-empty-state fs-base font-body">
                 You haven't added any friends yet.
               </p>
             ) : (
               friends.map((friend, i) => (
-                <motion.div
+                <div
                   key={friend.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.4, delay: i * 0.04 }}
                 >
                   <Link to={`/profile/${friend._id || friend.id}`} className="friend-card">
                     <img
@@ -144,124 +139,110 @@ function FriendsPage() {
                     />
                     <span className="friend-card-name font-hand fs-s">{friend.username}</span>
                   </Link>
-                </motion.div>
+                </div>
               ))
             )}
           </div>
         ) : (
           <div className="friends-find">
-            <div className="friend-requests-section">
-              {friendRequests.length > 0 && (
-                <>
-                  <h3 className="font-hand fs-m" style={{ color: 'var(--off-white)', marginBottom: '1rem' }}>Pending Requests</h3>
-                  <div className="friend-requests-grid" style={{ display: 'grid', gap: '1rem', marginBottom: '2rem' }}>
-                    {friendRequests.map((req: any) => (
-                      <div key={req._id} className="friend-request-card" style={{
-                        background: 'var(--charcoal-light)',
-                        padding: '1rem',
-                        borderRadius: '12px',
-                        border: '1px solid var(--charcoal-border)',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between'
-                      }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                          <img
-                            src={req.avatar || `https://api.dicebear.com/7.x/shapes/svg?seed=${req.username}`}
-                            alt={req.username}
-                            style={{ width: '48px', height: '48px', borderRadius: '50%', objectFit: 'cover' }}
-                          />
-                          <div>
-                            <span className="font-hand fs-s" style={{ color: 'var(--off-white)', display: 'block' }}>{req.username}</span>
-                            <span className="fs-xs" style={{ color: 'var(--mid-gray)' }}>{req.email}</span>
-                          </div>
-                        </div>
-                        <div style={{ display: 'flex', gap: '0.5rem' }}>
-                          <button
-                            onClick={() => acceptFriendRequest(req._id)}
-                            className="btn-gradient"
-                            style={{ padding: '0.5rem 1rem', fontSize: '0.8rem', borderRadius: '6px' }}
-                          >
-                            Accept
-                          </button>
-                          <button
-                            onClick={() => rejectFriendRequest(req._id)}
-                            style={{
-                              background: 'none',
-                              border: '1px solid var(--charcoal-border)',
-                              color: 'var(--mid-gray-light)',
-                              padding: '0.5rem',
-                              borderRadius: '6px',
-                              cursor: 'pointer'
-                            }}
-                          >
-                            Ignore
-                          </button>
+            {/* Pending Requests Section */}
+            {friendRequests.length > 0 && (
+              <div className="friend-requests-section">
+                <h3 className="friend-requests-title font-hand fs-m">Pending Requests</h3>
+                <div className="friend-requests-grid">
+                  {friendRequests.map((req: any) => (
+                    <div
+                      key={req._id}
+                      className="friend-request-card"
+                    >
+                      <div className="friend-request-info">
+                        <img
+                          src={req.avatar || `https://api.dicebear.com/7.x/shapes/svg?seed=${req.username}`}
+                          alt={req.username}
+                          className="friend-request-avatar"
+                        />
+                        <div className="friend-request-details">
+                          <span className="friend-request-name font-hand fs-s">{req.username}</span>
+                          <span className="friend-request-email fs-xs">{req.email}</span>
                         </div>
                       </div>
-                    ))}
-                  </div>
-                  <div style={{ width: '100%', height: '1px', background: 'var(--charcoal-border)', margin: '2rem 0' }}></div>
-                </>
+                      <div className="friend-request-actions">
+                        <button
+                          onClick={() => acceptFriendRequest(req._id)}
+                          className="btn-gradient btn-accept btn-sm"
+                        >
+                          <span>Accept</span>
+                        </button>
+                        <button
+                          onClick={() => rejectFriendRequest(req._id)}
+                          className="btn-gradient btn-decline btn-sm"
+                        >
+                          <span>Ignore</span>
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <div className="friend-requests-divider" />
+              </div>
+            )}
+
+            {/* Search Section */}
+            <div className="friends-search-section">
+              <h3 className="friends-search-title font-hand fs-m">Find by Email</h3>
+              <form onSubmit={handleSearch} className="friends-search-form">
+                <input
+                  type="email"
+                  placeholder="Enter friend's email address..."
+                  className="friends-search-input font-body"
+                  value={searchEmail}
+                  onChange={(e) => setSearchEmail(e.target.value)}
+                />
+                <button
+                  type="submit"
+                  className="btn-gradient btn-signin btn-sm"
+                  disabled={isLoading || !searchEmail}
+                >
+                  <span>{isLoading ? 'Searching...' : 'Search'}</span>
+                </button>
+              </form>
+
+              {error && (
+                <p className="friends-search-error fs-s font-body">{error}</p>
+              )}
+
+              {searchResults && (
+                <div
+                  className="friends-search-result"
+                >
+                  <Link to={`/profile/${searchResults._id || searchResults.id}`} className="friends-result-link">
+                    <img
+                      src={searchResults.avatar || `https://api.dicebear.com/7.x/shapes/svg?seed=${searchResults.username}`}
+                      alt={searchResults.username}
+                      className="friends-result-avatar"
+                    />
+                    <div className="friends-result-info">
+                      <span className="friends-result-name font-hand fs-m">{searchResults.username}</span>
+                      <span className="friends-result-email fs-xs">{searchResults.email}</span>
+                    </div>
+                  </Link>
+
+                  {requestSent ? (
+                    <button className="btn-gradient btn-decline" disabled>
+                      <span>Request Sent</span>
+                    </button>
+                  ) : (
+                    <button
+                      className="btn-gradient btn-accept"
+                      onClick={handleSendRequest}
+                      disabled={isLoading}
+                    >
+                      <span>Add Friend</span>
+                    </button>
+                  )}
+                </div>
               )}
             </div>
-
-            <form onSubmit={handleSearch} className="search-form">
-              <input
-                type="email"
-                placeholder="Enter friend's email address..."
-                className="search-input fs-base"
-                value={searchEmail}
-                onChange={(e) => setSearchEmail(e.target.value)}
-              />
-              <button
-                type="submit"
-                className="btn-gradient btn-search"
-                disabled={isLoading || !searchEmail}
-              >
-                {isLoading ? 'Searching...' : 'Search'}
-              </button>
-            </form>
-
-            {error && (
-              <p className="search-error fs-s" style={{ color: '#ff6b6b', textAlign: 'center', marginTop: '1rem' }}>
-                {error}
-              </p>
-            )}
-
-            {searchResults && (
-              <motion.div
-                className="search-result-card"
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-              >
-                <Link to={`/profile/${searchResults._id || searchResults.id}`} className="friend-card-link">
-                  <img
-                    src={searchResults.avatar || `https://api.dicebear.com/7.x/shapes/svg?seed=${searchResults.username}`}
-                    alt={searchResults.username}
-                    className="friend-card-avatar"
-                  />
-                  <div className="friend-info">
-                    <span className="friend-name font-hand fs-m">{searchResults.username}</span>
-                    <span className="friend-email fs-xs">{searchResults.email}</span>
-                  </div>
-                </Link>
-
-                {requestSent ? (
-                  <button className="btn-control btn-sent" disabled>
-                    Request Sent
-                  </button>
-                ) : (
-                  <button
-                    className="btn-gradient btn-add"
-                    onClick={handleSendRequest}
-                    disabled={isLoading}
-                  >
-                    Add Friend
-                  </button>
-                )}
-              </motion.div>
-            )}
           </div>
         )}
 

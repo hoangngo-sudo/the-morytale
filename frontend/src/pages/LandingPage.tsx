@@ -1,33 +1,10 @@
 import { useState, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { motion } from 'framer-motion'
 import Header from '@/components/Header/Header.tsx'
 import Marquee from '@/components/Marquee/Marquee.tsx'
 import SignInModal from '@/components/SignInModal/SignInModal.tsx'
 import { useAuthStore } from '@/store/authStore.ts'
-
-const scissorsIcon = (
-  <div className="scissors-icon" aria-hidden="true">
-    {/* <svg
-      width="48"
-      height="48"
-      viewBox="0 0 64 64"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <circle cx="18" cy="18" r="8" stroke="#f5f5f0" strokeWidth="2" fill="none" />
-      <circle cx="18" cy="46" r="8" stroke="#f5f5f0" strokeWidth="2" fill="none" />
-      <line x1="24" y1="14" x2="52" y2="40" stroke="#f5f5f0" strokeWidth="2" />
-      <line x1="24" y1="50" x2="52" y2="24" stroke="#f5f5f0" strokeWidth="2" />
-    </svg> */}
-  </div>
-)
-
-const featureIcon = (
-  <div className="feature-icon" aria-hidden="true">
-    <img src="/reel.svg" alt="" />
-  </div>
-)
+import 'animate.css'
 
 const wavyFooter = (
   <div className="wavy-footer" aria-hidden="true">
@@ -74,40 +51,24 @@ function LandingPage() {
       <Header variant="landing" />
       <Marquee />
 
-      {scissorsIcon}
-      {featureIcon}
+      {/* {scissorsIcon} */}
 
-      <section className="hero-section">{}
+      <section className="hero-section">
+        <h1 className="hero-title fs-xxxl animate__animated animate__fadeInUp">
+          What is a <span style={{ color: '#000000' }}>Mory</span>
+          <span style={{ color: '#C22626' }}>tale</span>?
+        </h1>
 
-        <motion.h1
-          className="hero-title fs-xxxl"
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: 'easeOut' }}
+        <div
+          className="tagline-block animate__animated animate__fadeInUp"
         >
-          The Cutting Room
-        </motion.h1>
-
-        <motion.div
-          className="tagline-block"
-          initial={{ opacity: 0, x: 20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.8, delay: 0.3, ease: 'easeOut' }}
-        >{}
           <p className="tagline-body fs-base">
-            Where random moments strikes into
-            <br />
-            untold narrative masterpieces...
+            "Morytale captures the moments of rythm and tales of your everyday digital life."
           </p>
-        </motion.div>
+        </div>
       </section>
 
-      <motion.div
-        className="cta-wrapper"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.6, ease: 'easeOut' }}
-      >
+      <div className="cta-wrapper animate__animated animate__fadeInUp">
         <button
           type="button"
           className="btn-gradient btn-cta"
@@ -115,7 +76,7 @@ function LandingPage() {
         >
           <span>Let your story begins here &rarr;</span>
         </button>
-      </motion.div>
+      </div>
 
       {wavyFooter}
 

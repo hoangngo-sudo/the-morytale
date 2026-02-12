@@ -1,5 +1,4 @@
 import { useRef, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
 import { useSocialStore } from '@/store/socialStore.ts'
 import { Link } from 'react-router-dom'
 import { formatDistanceToNow } from 'date-fns'
@@ -55,17 +54,13 @@ function NotificationPopover({ isOpen, onClose }: NotificationPopoverProps) {
         await markRead(notifId)
     }
 
+    if (!isOpen) return null
+
     return (
-        <AnimatePresence>
-            {isOpen && (
-                <motion.div
-                    className="notification-popover"
-                    ref={popoverRef}
-                    initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                    transition={{ duration: 0.2 }}
-                >
+        <div
+            className="notification-popover"
+            ref={popoverRef}
+        >
                     <div className="notif-header">
                         <h3 className="font-hand">Notifications</h3>
                         {notifications.length > 0 && (
@@ -102,28 +97,28 @@ function NotificationPopover({ isOpen, onClose }: NotificationPopoverProps) {
                                         {notif.type === 'friend_request' && (
                                             <div className="notif-actions">
                                                 <button
-                                                    className="btn-gradient btn-xs"
+                                                    className="btn-gradient btn-accept btn-xs"
                                                     onClick={(e) => {
                                                         e.stopPropagation();
                                                         e.nativeEvent.stopImmediatePropagation();
                                                         handleAccept(notif.from_user_id._id, notif._id);
                                                     }}
                                                 >
-                                                    Accept
+                                                    <span>Accept</span>
                                                 </button>
                                                 <button
-                                                    className="btn-outline btn-xs"
+                                                    className="btn-gradient btn-decline btn-xs"
                                                     onClick={(e) => {
                                                         e.stopPropagation();
                                                         e.nativeEvent.stopImmediatePropagation();
                                                         handleReject(notif.from_user_id._id, notif._id);
                                                     }}
                                                 >
-                                                    Reject
+                                                    <span>Reject</span>
                                                 </button>
                                                 <Link
                                                     to={`/friends?find=${notif.from_user_id.email}`}
-                                                    className="btn-outline btn-xs"
+                                                    className="btn-gradient btn-studio btn-xs"
                                                     onClick={(e) => {
                                                         e.stopPropagation();
                                                         e.nativeEvent.stopImmediatePropagation();
@@ -131,7 +126,7 @@ function NotificationPopover({ isOpen, onClose }: NotificationPopoverProps) {
                                                         onClose();
                                                     }}
                                                 >
-                                                    View Profile
+                                                    <span>View Profile</span>
                                                 </Link>
                                             </div>
                                         )}
@@ -147,9 +142,7 @@ function NotificationPopover({ isOpen, onClose }: NotificationPopoverProps) {
                             ))
                         )}
                     </div>
-                </motion.div>
-            )}
-        </AnimatePresence>
+        </div>
     )
 }
 

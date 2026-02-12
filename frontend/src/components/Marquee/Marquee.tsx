@@ -1,5 +1,5 @@
 /**
- * Marquee component — seamless infinite scroll.
+ * Marquee component for seamless infinite scroll.
  *
  * CSS animation technique by Ben Nadel.
  * @see https://www.bennadel.com/blog/4536-creating-a-marquee-effect-with-css-animations.htm
@@ -12,12 +12,20 @@
  */
 
 const MARQUEE_TEXT =
-  'an interactive storytelling application where users build a weekly chain of posts called a Track.'
+  'An interactive storytelling application where users build a weekly chain of posts called a track.'
 
-/* ── Hoisted static elements (rendering-hoist-jsx) ── */
-
-const scissorsSvg = (
-  <img src="/scissors.svg" width="60" height="50" alt="" aria-hidden="true" />
+const scissorsElement = (
+  <div className="css-scissors">
+    <div className="css-scissors__half">
+      <div className="css-scissors__handle"></div>
+      <div className="css-scissors__blade"></div>
+    </div>
+    <div className="css-scissors__half">
+      <div className="css-scissors__blade"></div>
+      <div className="css-scissors__handle"></div>
+    </div>
+    <div className="css-scissors__joint"></div>
+  </div>
 )
 
 const marqueeContent = (
@@ -30,11 +38,11 @@ function Marquee() {
   return (
     <div
       className="marquee-banner"
-      aria-label="Scrolling banner: an interactive storytelling application where users build a weekly chain of posts called a Track."
+      aria-label="Scrolling banner: An interactive storytelling application where users build a weekly chain of posts called a track."
       role="marquee"
     >
       <div className="marquee-scissors" aria-hidden="true">
-        {scissorsSvg}
+        {scissorsElement}
       </div>
 
       <div className="marquee">

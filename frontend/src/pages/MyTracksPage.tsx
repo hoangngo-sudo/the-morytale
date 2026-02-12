@@ -1,6 +1,5 @@
 import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { motion } from 'framer-motion'
 import Header from '@/components/Header/Header.tsx'
 import { useTrackStore } from '@/store/trackStore.ts'
 
@@ -28,12 +27,8 @@ function MyTracksPage() {
 
         <div className="my-tracks-list">
           {allTracks.map((track, i) => (
-            <motion.div
+            <div
               key={track.id}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: i * 0.06 }}
             >
               <Link
                 to={track.status === 'active' ? '/story' : `/tracks/${track.id}`}
@@ -73,7 +68,7 @@ function MyTracksPage() {
                   )}
                 </div>
               </Link>
-            </motion.div>
+            </div>
           ))}
         </div>
 

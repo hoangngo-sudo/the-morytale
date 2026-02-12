@@ -1,6 +1,5 @@
 import { useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
-import { motion } from 'framer-motion'
 import Header from '@/components/Header/Header.tsx'
 import { useAuthStore } from '@/store/authStore.ts'
 import { useTrackStore } from '@/store/trackStore.ts'
@@ -66,12 +65,7 @@ function ProfilePage() {
       <Header variant="story" />
 
       <div className="profile-view">
-        <motion.div
-          className="profile-header-section"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-        >
+        <div className="profile-header-section">
           <img
             src={profileUser.avatar || `https://api.dicebear.com/7.x/shapes/svg?seed=${profileUser.username}`}
             alt={profileUser.displayName || profileUser.username}
@@ -100,7 +94,7 @@ function ProfilePage() {
               </div>
             </div>
           </div>
-        </motion.div>
+        </div>
 
         {isOwnProfile ? (
           <div className="profile-actions">
@@ -118,12 +112,8 @@ function ProfilePage() {
           <div className="profile-tracks-grid">
             {userTracks.length > 0 ? (
               userTracks.map((track, i) => (
-                <motion.div
+                <div
                   key={track.id}
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.4, delay: i * 0.06 }}
                 >
                   <Link to={`/tracks/${track.id}`} className="profile-track-card">
                     <img
@@ -141,7 +131,7 @@ function ProfilePage() {
                       <span className="profile-track-badge fs-xs">Active</span>
                     ) : null}
                   </Link>
-                </motion.div>
+                </div>
               ))
             ) : (
               <p className="profile-no-tracks fs-base">No tracks (that are public) yet.</p>

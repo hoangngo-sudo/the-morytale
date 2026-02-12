@@ -1,6 +1,5 @@
 import { useRef, useEffect, useCallback, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { motion } from 'framer-motion'
 import Header from '@/components/Header/Header.tsx'
 import UploadModal from '@/components/UploadModal/UploadModal.tsx'
 import { useTrackStore } from '@/store/trackStore.ts'
@@ -120,16 +119,15 @@ function StoryPage() {
       {/* Top Controls Bar */}
       <div className="story-controls">
         <div className="controls-left">
-          <button className="btn-control" onClick={handleEndStory}>
-            End Story
+          <button className="btn-gradient btn-primary" onClick={handleEndStory}>
+            <span>End Story</span>
           </button>
           <button
-            className="btn-control"
+            className="btn-gradient btn-upload"
             onClick={openModal}
             disabled={!canAddNode}
-            style={{ opacity: canAddNode ? 1 : 0.5, cursor: canAddNode ? 'pointer' : 'not-allowed' }}
           >
-            New Node
+            <span>New Node</span>
           </button>
         </div>
         <div className="controls-right">
@@ -151,13 +149,9 @@ function StoryPage() {
             <div className="row parallax-section" ref={parallaxContainerRef}>{ }
               <div className="col-6" ref={parallaxLeftRef}>
                 {currentTrack.nodes.filter((_, i) => i % 2 === 0).map((node, i) => (
-                  <motion.div
+                  <div
                     key={node.id || i}
                     className="collage-card"
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, margin: '-50px' }}
-                    transition={{ duration: 0.5, delay: i * 0.05 }}
                   >
                     <img
                       src={node.src}
@@ -166,18 +160,14 @@ function StoryPage() {
                       draggable={false}
                     />
                     <p className="caption fs-xs">{node.caption}</p>
-                  </motion.div>
+                  </div>
                 ))}
               </div>{ }
               <div className="col-6" ref={parallaxRightRef}>
                 {currentTrack.nodes.filter((_, i) => i % 2 !== 0).map((node, i) => (
-                  <motion.div
+                  <div
                     key={node.id || i}
                     className="collage-card"
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, margin: '-50px' }}
-                    transition={{ duration: 0.5, delay: i * 0.05 }}
                   >
                     <img
                       src={node.src}
@@ -186,7 +176,7 @@ function StoryPage() {
                       draggable={false}
                     />
                     <p className="caption fs-xs">{node.caption}</p>
-                  </motion.div>
+                  </div>
                 ))}
               </div>
             </div>

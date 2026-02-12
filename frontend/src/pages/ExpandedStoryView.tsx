@@ -1,6 +1,5 @@
 import { useParams, useNavigate, Link } from 'react-router-dom'
 import { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
 import Header from '@/components/Header/Header.tsx'
 import { useTrackStore } from '@/store/trackStore.ts'
 import type { Track } from '@/types/index.ts'
@@ -66,13 +65,9 @@ function ExpandedStoryView() {
 
         <div className="expanded-content">
           {track.nodes.map((node: any, i: number) => (
-            <motion.div
+            <div
               key={node.id}
               className="expanded-entry"
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-40px' }}
-              transition={{ duration: 0.5, delay: i * 0.06 }}
             >
               <div className="expanded-entry-image">
                 <img
@@ -92,21 +87,7 @@ function ExpandedStoryView() {
                 </p>
                 <span className="expanded-entry-date fs-xs">{node.date}</span>
               </div>
-            </motion.div>
-          ))}{}
-          {Array.from({ length: Math.max(0, 10 - track.nodes.length) }).map((_, i) => (
-            <motion.div
-              key={`empty-${i}`}
-              className="expanded-entry expanded-entry-empty"
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4 }}
-            >
-              <div className="empty-slot">
-                <span className="fs-l">???</span>
-              </div>
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>
