@@ -11,8 +11,6 @@
 
 > Morytale transforms weekly digital moments into a living narrative using generative AI, helping users discover the story hidden inside their everyday life.
 
----
-
 ## Table of Contents
 
 - [Team](#team)
@@ -32,8 +30,6 @@
 - [What We Learned](#what-we-learned)
 - [Future Improvements](#future-improvements)
 
----
-
 ## Team
 
 | Name | Email | Github |
@@ -42,8 +38,6 @@
 | Han Dang | ldang7@uic.edu | [@ghandle18](https://github.com/ghandle18) |  
 | Minh Khoa Cao | mcao@uic.edu | [@cmkhoa](https://github.com/cmkhoa) |
 | Hoang Minh Ngo | mngo@uic.edu | [@hoangngo-sudo](https://github.com/hoangngo-sudo) |
-
----
 
 ## Problem
 
@@ -56,8 +50,6 @@ Users post isolated content — photos, short text, captions — but platforms r
 - How does your experience compare to others?
 
 We wanted to build a system that transforms small moments into structured narrative reflection.
-
----
 
 ## Solution
 
@@ -73,8 +65,6 @@ At **the end of each week**, the system generates:
 2. **A Community Reflection** — anonymous parallels from other users' weeks
 
 The result is an interactive narrative shaped by real user behavior.
-
----
 
 ## Key Features
 
@@ -109,8 +99,6 @@ When a user finishes their weekly track, the system:
 - Friend request / acceptance alerts
 - Polling-based real-time updates
 
----
-
 ## Architecture
 
 ```
@@ -125,8 +113,6 @@ Express API (Node.js, port 5000)
 ```
 
 The Express API handles all orchestration, which includes item storage, node/track management, daily limits, and auto-conclude logic. The Python ML service is a **stateless worker** that only performs AI generation tasks.
-
----
 
 ## Tech Stack
 
@@ -160,8 +146,6 @@ The Express API handles all orchestration, which includes item storage, node/tra
 | Google Gemini 2.5 Flash | Story generation (text & vision) |
 | Pillow | Image processing |
 | Uvicorn | ASGI server |
-
----
 
 ## Project Structure
 
@@ -221,8 +205,6 @@ morytale/
 │           └── requirements.txt
 └── Dockerfile                  # Multi-stage production build
 ```
-
----
 
 ## API Reference
 
@@ -297,8 +279,6 @@ morytale/
 | POST | `/api/ml/generate-conclusion` | Generate track conclusion + community reflection |
 | GET | `/api/ml/health` | Health check |
 
----
-
 ## Getting Started
 
 ### Prerequisites
@@ -362,8 +342,6 @@ python server.py
 
 The frontend runs on `http://localhost:5173`, the Express API on `http://localhost:5000`, and the ML service on `http://localhost:8008`.
 
----
-
 ## Deployment
 
 ### Docker (Production)
@@ -376,8 +354,6 @@ docker run -p 5000:5000 --env-file server/.env morytale
 ```
 
 > **Note:** The ML service runs separately and must be deployed alongside or configured via `MODEL_API_URL`.
-
----
 
 ## Demo Screenshots
 
@@ -431,14 +407,10 @@ docker run -p 5000:5000 --env-file server/.env morytale
        </details>
 </details>
 
----
-
 ## Operation Logic
 <img width="972" height="1096" alt="image" src="https://github.com/user-attachments/assets/5200f60e-5041-4fa0-9a04-5f04cf802e65" /><br>
 
 [@Figma Link](https://www.figma.com/board/cSuav0RHsDQbNt26FuRQ0H/SH26---The-Cutting-Room-Ideation-Board?node-id=0-1&t=8osmz0hyamvbW3RM-1)
-
----
 
 ## Challenges
 
@@ -450,8 +422,6 @@ docker run -p 5000:5000 --env-file server/.env morytale
 
 We prioritized stable end-to-end functionality over experimental features.
 
----
-
 ## Innovation
 
 Unlike journaling apps or social feeds, Morytale:
@@ -462,8 +432,6 @@ Unlike journaling apps or social feeds, Morytale:
 - **Applies intentional design constraints** — daily limits and friend caps shape meaningful interaction
 
 We are not summarizing posts. We are building narratives from the accumulation of small moments over time.
-
----
 
 ## Impact
 
@@ -479,8 +447,6 @@ Potential use cases:
 - Mental health pattern awareness
 - Weekly behavioral insight tracking
 
----
-
 ## What We Learned
 
 **Technically**
@@ -492,8 +458,6 @@ Potential use cases:
 **Interpersonally**
 
 Throughout this experience, each team member learned to adapt and improvise under limited time and resources in a hackathon context. We collaborated effectively by maximizing each person's strengths toward our shared goal.
-
----
 
 ## Future Improvements
 
