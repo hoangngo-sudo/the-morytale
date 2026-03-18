@@ -7,28 +7,28 @@
 
 *where random moments strike into untold narrative masterpieces...*
 
-**Track 02: Narrative storytelling in  an interactive application**
+**Track 02: Narrative storytelling in an interactive application**
 
 > Morytale transforms weekly digital moments into a living narrative using generative AI, helping users discover the story hidden inside their everyday life.
 
 ## Table of Contents
 
-- [Team](#team)
-- [Problem](#problem)
-- [Solution](#solution)
-- [Key Features](#key-features)
-- [Architecture](#architecture)
-- [Tech Stack](#tech-stack)
-- [Project Structure](#project-structure)
-- [API Reference](#api-reference)
-- [Getting Started](#getting-started)
-- [Deployment](#deployment)
-- [Demo Screenshots](#demo-screenshots)
-- [Challenges](#challenges)
-- [Innovation](#innovation)
-- [Impact](#impact)
-- [What We Learned](#what-we-learned)
-- [Future Improvements](#future-improvements)
+1. [Team](#team)
+2. [Problem](#problem)
+3. [Solution](#solution)
+4. [Key Features](#key-features)
+5. [Architecture](#architecture)
+6. [Tech Stack](#tech-stack)
+7. [Project Structure](#project-structure)
+8. [API Reference](#api-reference)
+9. [Getting Started](#getting-started)
+10. [Deployment](#deployment)
+11. [Demo Screenshots](#demo-screenshots)
+12. [Challenges](#challenges)
+13. [Innovation](#innovation)
+14. [Impact](#impact)
+15. [What We Learned](#what-we-learned)
+16. [Future Improvements](#future-improvements)
 
 ## Team
 
@@ -41,111 +41,201 @@
 
 ## Problem
 
-Modern social platforms document events but **do not interpret patterns**.
+Modern social platforms are great at documenting events, but they rarely interpret the patterns behind them. Users post isolated content like photos, short text, and captions every day, but the platforms never answer the deeper questions. What themes defined your week? Did your mood shift over time? How does your experience compare to what others are going through?
 
-Users post isolated content — photos, short text, captions — but platforms rarely answer:
-
-- What themes defined your week?
-- Did your mood shift?
-- How does your experience compare to others?
-
-We wanted to build a system that transforms small moments into structured narrative reflection.
+We wanted to build a system that takes these small, scattered moments and transforms them into structured narrative reflection. Instead of just storing memories, we wanted to help people understand the story their life is telling.
 
 ## Solution
 
-Morytale introduces **Weekly Tracks** — instead of a feed, users build a connected chain of posts called **a track**.
+Morytale introduces the concept of Weekly Tracks. Rather than scrolling through a traditional feed, users build a connected chain of posts called a Track throughout their week.
 
-Each post (**Node**) contains:
-- One photo **or** one text entry
-- An optional caption
-- An AI-generated story segment that weaves the moment into the week's narrative
+Each post creates what we call a Node. A Node contains one photo or one text entry, along with an optional caption. When you upload something, our AI generates a story segment that weaves that moment into the week's ongoing narrative.
 
-At **the end of each week**, the system generates:
-1. **A Personal Story** — a warm, reflective conclusion to the week
-2. **A Community Reflection** — anonymous parallels from other users' weeks
+At the end of each week, the system generates two things. First, it creates a Personal Story, which is a warm, reflective conclusion that wraps up the week's experiences. Second, it generates a Community Reflection, which shares anonymous parallels from other users' weeks to show that you are not alone in what you are going through.
 
-The result is an interactive narrative shaped by real user behavior.
+The result is an interactive narrative shaped by real user behavior, turning everyday moments into meaningful stories.
 
 ## Key Features
 
-### 1. Intentional Posting Design
-- 30 posts per day limit (for demo, but usually we will stick with only 10 posts per day)
-- 20 friend cap
-- Weekly reset cycle
+### Intentional Posting Design
 
-These constraints improve narrative pacing and reduce content overload.
+We designed Morytale with constraints that improve the storytelling experience. Users can make up to 30 posts per day during the demo, but in regular use we stick with only 10 posts per day. There is also a 20 friend cap and a weekly reset cycle. These limitations improve narrative pacing and reduce the content overload that plagues most social platforms.
 
-### 2. AI Story Weaving
-Each upload (image or text) is sent to a **Gemini 2.5 Flash** model that:
-- Describes what was shared
-- Writes the next 1–2 sentence segment of the user's weekly story
-- Maintains narrative continuity with previous moments
+### AI Story Weaving
 
-### 3. Track Conclusion & Community Reflection
-When a user finishes their weekly track, the system:
-1. Generates a **conclusion** — a warm wrap-up of the week's story
-2. Finds **similar stories** from the community
-3. Generates a **community reflection** showing the user they're not alone
+Every time you upload an image or text, it gets sent to a Gemini 2.5 Flash model. The AI describes what was shared, writes the next one or two sentences of your weekly story, and maintains narrative continuity with all your previous moments. Each upload builds on the last, creating a cohesive story rather than isolated posts.
 
-### 4. Social Layer
-- Google OAuth sign-in
-- Friend requests, acceptance, and removal
-- Likes on nodes with real-time notifications
-- Explore page to discover community tracks
-- User profiles with track history
+### Track Conclusion and Community Reflection
 
-### 5. Notifications
-- Like notifications
-- Friend request / acceptance alerts
-- Polling-based real-time updates
+When you finish your weekly track, either by reaching the node limit or by manually ending your story, the system kicks into action. It generates a warm conclusion that wraps up the week's narrative. Then it finds similar stories from the community and creates a reflection that shows you the connections between your experience and others. This helps users feel less alone in their experiences.
+
+### Social Layer
+
+Morytale includes a full social experience. You can sign in with Google OAuth, send and accept friend requests, and remove friends when needed. You can like nodes from other users and receive real time notifications about those interactions. There is an explore page where you can discover community tracks, and user profiles let you browse track history.
+
+### Notifications
+
+The notification system keeps you connected. You will receive alerts when someone likes your content, when you get a friend request, and when someone accepts your request. Updates arrive through a polling based system that keeps things running smoothly.
 
 ## Architecture
 
-```
-React Client (Vite)
-       ↓
-Express API (Node.js, port 5000)
-       ↓                ↓
-   MongoDB       ML Service (FastAPI, port 8008)
-       ↓                ↓
-  Cloudflare R2    Google Gemini 2.5 Flash
-  (image storage)  (story generation)
+The application uses a three tier architecture that separates concerns cleanly. The React client handles the user interface, the Express API manages all the business logic, and a Python ML service handles AI generation tasks.
+
+```mermaid
+graph TB
+    subgraph Frontend["Frontend (React 19 + Vite)"]
+        React[React Client]
+        Zustand[Zustand Stores]
+        ReactQuery[React Query]
+    end
+
+    subgraph Backend["Backend (Node.js + Express 5)"]
+        Express[Express API<br/>Port 5000]
+        Mongoose[Mongoose ODM]
+        Passport[Passport.js OAuth]
+    end
+
+    subgraph MLService["ML Service (Python + FastAPI)"]
+        FastAPI[FastAPI Server<br/>Port 8008]
+        Gemini[Google Gemini 2.5 Flash]
+    end
+
+    subgraph Storage["External Storage"]
+        MongoDB[(MongoDB Atlas)]
+        R2[(Cloudflare R2<br/>Image Storage)]
+    end
+
+    React --> Express
+    Express --> Mongoose
+    Mongoose --> MongoDB
+    Express --> FastAPI
+    FastAPI --> Gemini
+    Express --> R2
 ```
 
-The Express API handles all orchestration, which includes item storage, node/track management, daily limits, and auto-conclude logic. The Python ML service is a **stateless worker** that only performs AI generation tasks.
+The Express API handles all orchestration, including item storage, node and track management, daily limits, and auto conclude logic. The Python ML service is a stateless worker that only performs AI generation tasks. This separation makes the system easier to scale and maintain.
+
+### Item Upload Flow
+
+When a user uploads content, the system processes it through several steps. This diagram shows how data flows from the user through all the services.
+
+```mermaid
+sequenceDiagram
+    participant U as User
+    participant FE as Frontend
+    participant API as Express API
+    participant ML as ML Service
+    participant R2 as Cloudflare R2
+    participant DB as MongoDB
+
+    U->>FE: Upload image with caption
+    FE->>API: POST /api/items (multipart)
+    API->>API: Check daily limit
+    API->>R2: Upload image
+    R2-->>API: Return image URL
+    API->>ML: POST /story-from-image
+    ML->>ML: Gemini generates description and story segment
+    ML-->>API: Return description and story segment
+    API->>DB: Create Item record
+    API->>DB: Create Node record
+    API->>DB: Update Track with new story segment
+    API->>API: Check if auto conclude needed
+    API-->>FE: Return item, node, and remaining count
+    FE->>FE: Refresh track display
+```
+
+### Track Lifecycle
+
+Each track follows a natural lifecycle from creation to conclusion. A new track starts when a user makes their first post of the week. The track stays active as new nodes get added. When certain conditions are met, like reaching 10 nodes or passing 7 days, the system automatically concludes the track with AI generated content.
+
+```mermaid
+%%{init: {'flowchart': {'linear': 'basis'}}}%%
+flowchart LR
+    Start((Start)) --> Active
+
+    subgraph Active[Active Track]
+        direction TB
+        A1[Add nodes]
+        A1 --> A1
+    end
+
+    Active -->|10 nodes reached| Conclude
+    Active -->|7 days elapsed| Conclude
+    Active -->|User ends story| Conclude
+
+    subgraph Conclude[Concluded]
+        direction TB
+        C1[Generate story conclusion]
+        C2[Generate community reflection]
+        C1 --> C2
+    end
+
+    Conclude --> End((End))
+```
+
+### Data Model Relationships
+
+The core data models connect to form the foundation of the narrative system. Users own tracks and create items. Nodes wrap items and form a linked list structure within tracks.
+
+```mermaid
+erDiagram
+    User ||--o{ Track : owns
+    User ||--o{ Item : creates
+    User ||--o{ Node : authors
+    User }o--o{ User : friends
+
+    Track ||--o{ Node : contains
+    Node ||--|| Item : wraps
+    Node }o--o| Node : previous
+    Node }o--o{ User : liked_by
+
+    User {
+        ObjectId _id
+        string username
+        string email
+        string googleId
+        string avatar
+    }
+
+    Track {
+        ObjectId _id
+        ObjectId user_id
+        string week_id
+        string story
+        boolean concluded
+    }
+
+    Node {
+        ObjectId _id
+        ObjectId user_id
+        ObjectId user_item_id
+        string recap_sentence
+        string week_id
+    }
+
+    Item {
+        ObjectId _id
+        ObjectId user_id
+        string content_type
+        string content_url
+        string text
+        string description
+    }
+```
 
 ## Tech Stack
 
 ### Frontend
-| Technology | Purpose |
-|------------|---------|
-| React 19 | UI framework |
-| Vite | Build tool & dev server |
-| TypeScript | Type safety |
-| React Router 7 | Client-side routing |
-| Zustand | State management |
-| React Query (TanStack) | Server state & caching |
-| Bootstrap 5 | Styling |
-| Animate.css | Animations |
-| Axios | HTTP client |
+
+The frontend is built with React 19 as the UI framework, using Vite as the build tool and development server. TypeScript provides type safety throughout the codebase. React Router 7 handles client side routing, while Zustand manages application state. React Query from TanStack handles server state and caching. Bootstrap 5 provides styling, Animate.css adds animations, and Axios serves as the HTTP client.
 
 ### Backend
-| Technology | Purpose |
-|------------|---------|
-| Node.js + Express 5 | REST API server |
-| MongoDB + Mongoose | Database & ODM |
-| Passport.js | Google OAuth 2.0 authentication |
-| JWT | Session tokens |
-| Multer | File upload handling |
-| Cloudflare R2 (S3-compatible) | Image storage |
+
+The backend runs on Node.js with Express 5 as the REST API server. MongoDB serves as the database with Mongoose as the ODM. Passport.js handles Google OAuth 2.0 authentication, and JWT manages session tokens. Multer processes file uploads, and Cloudflare R2 (which is S3 compatible) stores images.
 
 ### ML Service
-| Technology | Purpose |
-|------------|---------|
-| Python + FastAPI | ML microservice |
-| Google Gemini 2.5 Flash | Story generation (text & vision) |
-| Pillow | Image processing |
-| Uvicorn | ASGI server |
+
+The ML service is built with Python and FastAPI as the microservice framework. Google Gemini 2.5 Flash powers all story generation for both text and vision tasks. Pillow handles image processing, and Uvicorn serves as the ASGI server.
 
 ## Project Structure
 
@@ -208,90 +298,103 @@ morytale/
 
 ## API Reference
 
-### Auth (`/api/auth`)
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | `/register` | Register with email/password |
-| POST | `/login` | Login with email/password |
-| GET | `/me` | Get current user (requires auth) |
-| GET | `/google` | Initiate Google OAuth |
-| GET | `/google/callback` | OAuth callback |
+### Auth Endpoints (/api/auth)
 
-### Items (`/api/items`) — *Auth required*
 | Method | Endpoint | Description |
 |--------|----------|-------------|
-| POST | `/` | Create item (image upload or text) |
-| GET | `/:id` | Get single item |
-| GET | `/user/:userId` | Get user's items |
-| PUT | `/:id` | Update item |
-| DELETE | `/:id` | Delete item |
+| POST | /register | Register with email and password |
+| POST | /login | Login with email and password |
+| GET | /me | Get current user (requires authentication) |
+| GET | /google | Initiate Google OAuth |
+| GET | /google/callback | OAuth callback handler |
 
-### Nodes (`/api/nodes`) — *Auth required*
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | `/` | Create node (triggers AI story generation) |
-| GET | `/:id` | Get single node |
-| GET | `/user/:userId` | Get user's nodes |
-| PUT | `/:id` | Update node |
-| DELETE | `/:id` | Delete node |
-| POST | `/:id/like` | Like a node |
-| DELETE | `/:id/like` | Unlike a node |
+### Items Endpoints (/api/items)
 
-### Tracks (`/api/tracks`) — *Auth required*
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/current` | Get current week's track |
-| GET | `/history` | Get past tracks |
-| GET | `/community` | Get community tracks |
-| GET | `/:id` | Get single track |
-| GET | `/:id/story` | Get track's compiled story |
-| POST | `/:id/conclude` | Conclude track (triggers AI conclusion) |
-| PUT | `/:id` | Update track |
-| DELETE | `/:id` | Delete track |
+All endpoints require authentication.
 
-### Users (`/api/users`) — *Auth required*
 | Method | Endpoint | Description |
 |--------|----------|-------------|
-| GET | `/me` | Get own profile |
-| PUT | `/me` | Update profile |
-| GET | `/friends` | Get friend list |
-| GET | `/search` | Search user by email |
-| GET | `/requests` | Get pending friend requests |
-| POST | `/requests/:id/accept` | Accept friend request |
-| DELETE | `/requests/:id` | Reject friend request |
-| GET | `/:id` | Get user profile |
-| POST | `/:id/request` | Send friend request |
-| DELETE | `/:id/friend` | Remove friend |
+| POST | / | Create item with image upload or text |
+| GET | /:id | Get single item |
+| GET | /user/:userId | Get items by user |
+| PUT | /:id | Update item |
+| DELETE | /:id | Delete item |
 
-### Notifications (`/api/notifications`) — *Auth required*
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/` | Get notifications |
-| PUT | `/read-all` | Mark all as read |
-| PUT | `/:id/read` | Mark one as read |
-| DELETE | `/:id` | Delete notification |
+### Nodes Endpoints (/api/nodes)
 
-### ML Service (`port 8008`)
+All endpoints require authentication.
+
 | Method | Endpoint | Description |
 |--------|----------|-------------|
-| POST | `/api/ml/story-from-image` | Generate story segment from image |
-| POST | `/api/ml/story-from-text` | Generate story segment from text |
-| POST | `/api/ml/generate-conclusion` | Generate track conclusion + community reflection |
-| GET | `/api/ml/health` | Health check |
+| POST | / | Create node (triggers AI story generation) |
+| GET | /:id | Get single node |
+| GET | /user/:userId | Get nodes by user |
+| PUT | /:id | Update node |
+| DELETE | /:id | Delete node |
+| POST | /:id/like | Like a node |
+| DELETE | /:id/like | Unlike a node |
+
+### Tracks Endpoints (/api/tracks)
+
+All endpoints require authentication.
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | /current | Get current week track |
+| GET | /history | Get past tracks |
+| GET | /community | Get community tracks |
+| GET | /:id | Get single track |
+| GET | /:id/story | Get compiled story for track |
+| POST | /:id/conclude | Conclude track (triggers AI conclusion) |
+| PUT | /:id | Update track |
+| DELETE | /:id | Delete track |
+
+### Users Endpoints (/api/users)
+
+All endpoints require authentication.
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | /me | Get own profile |
+| PUT | /me | Update profile |
+| GET | /friends | Get friend list |
+| GET | /search | Search user by email |
+| GET | /requests | Get pending friend requests |
+| POST | /requests/:id/accept | Accept friend request |
+| DELETE | /requests/:id | Reject friend request |
+| GET | /:id | Get user profile |
+| POST | /:id/request | Send friend request |
+| DELETE | /:id/friend | Remove friend |
+
+### Notifications Endpoints (/api/notifications)
+
+All endpoints require authentication.
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | / | Get notifications |
+| PUT | /read-all | Mark all as read |
+| PUT | /:id/read | Mark one as read |
+| DELETE | /:id | Delete notification |
+
+### ML Service Endpoints (Port 8008)
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | /api/ml/story-from-image | Generate story segment from image |
+| POST | /api/ml/story-from-text | Generate story segment from text |
+| POST | /api/ml/generate-conclusion | Generate track conclusion and community reflection |
+| GET | /api/ml/health | Health check |
 
 ## Getting Started
 
 ### Prerequisites
-- Node.js 20+
-- Python 3.10+
-- MongoDB Atlas account (or local MongoDB)
-- Cloudflare R2 bucket
-- Google Cloud OAuth credentials
-- Google Gemini API key
+
+Before running Morytale, you will need Node.js 20 or higher, Python 3.10 or higher, and a MongoDB Atlas account (or a local MongoDB installation). You will also need a Cloudflare R2 bucket for image storage, Google Cloud OAuth credentials for authentication, and a Google Gemini API key for AI generation.
 
 ### Environment Variables
 
-Create a `.env` file in the `server/` directory:
+Create a `.env` file in the `server/` directory with the following variables:
 
 ```env
 MONGODB_URI=mongodb+srv://...
@@ -312,48 +415,51 @@ MODEL_API_URL=http://localhost:8008
 
 ### Run Locally
 
-**1. Backend (Express API)**
+**Step 1: Start the Backend (Express API)**
+
 ```bash
 cd server
 npm install
 npm run dev
 ```
 
-**2. Frontend (React + Vite)**
+**Step 2: Start the Frontend (React + Vite)**
+
 ```bash
 cd frontend
 npm install
 npm run dev
 ```
 
-**3. ML Service (FastAPI)**
+**Step 3: Start the ML Service (FastAPI)**
+
 ```bash
 cd server/services/ml
 python -m venv venv
 
-# Windows
+# On Windows
 .\venv\Scripts\Activate.ps1
-# macOS/Linux
+# On macOS or Linux
 source venv/bin/activate
 
 pip install -r requirements.txt
 python server.py
 ```
 
-The frontend runs on `http://localhost:5173`, the Express API on `http://localhost:5000`, and the ML service on `http://localhost:8008`.
+Once everything is running, the frontend will be available at http://localhost:5173, the Express API at http://localhost:5000, and the ML service at http://localhost:8008.
 
 ## Deployment
 
 ### Docker (Production)
 
-The included multi-stage `Dockerfile` builds the frontend and bundles it with the Express server:
+The included multi-stage Dockerfile builds the frontend and bundles it with the Express server. To build and run the container:
 
 ```bash
 docker build -t morytale .
 docker run -p 5000:5000 --env-file server/.env morytale
 ```
 
-> **Note:** The ML service runs separately and must be deployed alongside or configured via `MODEL_API_URL`.
+Note that the ML service runs separately and must be deployed alongside the main application. Configure its location using the MODEL_API_URL environment variable.
 
 ## Demo Screenshots
 
@@ -408,63 +514,41 @@ docker run -p 5000:5000 --env-file server/.env morytale
 </details>
 
 ## Operation Logic
+
 <img width="972" height="1096" alt="image" src="https://github.com/user-attachments/assets/5200f60e-5041-4fa0-9a04-5f04cf802e65" /><br>
 
 [@Figma Link](https://www.figma.com/board/cSuav0RHsDQbNt26FuRQ0H/SH26---The-Cutting-Room-Ideation-Board?node-id=0-1&t=8osmz0hyamvbW3RM-1)
 
 ## Challenges
 
-1. Balancing AI ambition with hackathon time constraints
-2. Designing a clean separation between the Node.js orchestration layer and the stateless Python ML worker
-3. Making Gemini 2.5 Flash produce consistent, well-structured JSON for story segments
-4. Coordinating frontend, backend, and ML service across three processes during development
-5. Building a social layer (friends, likes, notifications) alongside the core narrative engine
+Building Morytale during a hackathon presented several challenges. We had to balance our ambitious AI goals with the reality of limited time. Designing a clean separation between the Node.js orchestration layer and the stateless Python ML worker required careful planning. Getting Gemini 2.5 Flash to produce consistent, well-structured JSON for story segments took some iteration to get right. Coordinating the frontend, backend, and ML service across three processes during development added complexity to our workflow. Finally, building a full social layer with friends, likes, and notifications alongside the core narrative engine was a significant undertaking.
 
-We prioritized stable end-to-end functionality over experimental features.
+Throughout all of these challenges, we prioritized stable end-to-end functionality over experimental features.
 
 ## Innovation
 
-Unlike journaling apps or social feeds, Morytale:
+Morytale differs from traditional journaling apps and social feeds in several important ways. First, it generates stories incrementally, meaning each upload extends a running narrative rather than creating a standalone post. Second, it uses multimodal AI through Gemini 2.5 Flash, which processes both images and text to weave story segments together. Third, it connects personal experience with community by showing anonymous parallel stories that help users know they are not alone. Fourth, it applies intentional design constraints, using daily limits and friend caps to shape more meaningful interaction.
 
-- **Generates stories incrementally** — each upload extends a running narrative, not just a standalone post
-- **Uses multimodal AI** — Gemini 2.5 Flash processes both images and text to weave story segments
-- **Connects personal experience with community** — anonymous parallel stories show users they're not alone
-- **Applies intentional design constraints** — daily limits and friend caps shape meaningful interaction
-
-We are not summarizing posts. We are building narratives from the accumulation of small moments over time.
+We are not just summarizing posts. We are building narratives from the accumulation of small moments over time.
 
 ## Impact
 
-This project explores:
-- Reflective digital storytelling
-- AI-assisted behavioral insight
-- Reduced-performance social interaction
-- Intentional posting design
+This project explores several interesting areas including reflective digital storytelling, AI-assisted behavioral insight, reduced-performance social interaction, and intentional posting design.
 
-Potential use cases:
-- Student reflection tools
-- Creative journaling platforms
-- Mental health pattern awareness
-- Weekly behavioral insight tracking
+There are many potential use cases for this approach. Students could use it as a reflection tool to track their academic journey. Writers and creatives could use it as a journaling platform. Mental health professionals could adapt it for pattern awareness applications. Anyone interested in weekly behavioral insight tracking could benefit from this kind of narrative approach.
 
 ## What We Learned
 
-**Technically**
+### Technical Lessons
 
-- Narrative can emerge from iterative AI generation over a sequence of user inputs
-- Separating ML into a stateless microservice greatly simplifies the main API server
-- Zustand + React Query is an effective lightweight state management combo for React 19
+We discovered that narrative can emerge from iterative AI generation over a sequence of user inputs. Separating ML into a stateless microservice greatly simplified the main API server and made the architecture cleaner. We also found that Zustand combined with React Query is an effective lightweight state management combination for React 19 applications.
 
-**Interpersonally**
+### Interpersonal Lessons
 
 Throughout this experience, each team member learned to adapt and improvise under limited time and resources in a hackathon context. We collaborated effectively by maximizing each person's strengths toward our shared goal.
 
 ## Future Improvements
 
-- Monthly and semester-level narrative arcs
-- Mood trajectory visualization
-- Embedding-based similarity matching for richer community connections
-- More advanced clustering (hierarchical / dynamic K)
-- Personalized long-term trend detection
+Looking ahead, we have several ideas for extending Morytale. We would like to add monthly and semester level narrative arcs that span longer time periods. Mood trajectory visualization would help users see emotional patterns over time. Embedding based similarity matching would create richer community connections. More advanced clustering algorithms with hierarchical or dynamic K values could improve story matching. Finally, personalized long term trend detection would give users deeper insights into their patterns over extended periods.
 
 ---
