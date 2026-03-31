@@ -82,14 +82,15 @@ The notification system keeps you connected. You will receive alerts when someon
 The application uses a three tier architecture that separates concerns cleanly. The React client handles the user interface, the Express API manages all the business logic, and a Python ML service handles AI generation tasks.
 
 ```mermaid
+%%{init: {'theme': 'base', 'flowchart': {'defaultRenderer': 'elk', 'curve': 'basis'}, 'themeVariables': {'primaryColor': '#818cf8', 'primaryTextColor': '#ffffff', 'primaryBorderColor': '#4f46e5', 'lineColor': '#4f46e5', 'secondaryColor': '#e0e7ff', 'tertiaryColor': '#f0fdf4', 'clusterBkg': '#e0e7ff', 'edgeLabelBackground': '#1e1b4b', 'fontFamily': 'sans-serif'}}}%%
 graph TB
-    subgraph Frontend["Frontend (React 19 + Vite)"]
+    subgraph Frontend["Frontend (React + Vite)"]
         React[React Client]
         Zustand[Zustand Stores]
         ReactQuery[React Query]
     end
 
-    subgraph Backend["Backend (Node.js + Express 5)"]
+    subgraph Backend["Backend (Node.js + Express)"]
         Express[Express API<br/>Port 5000]
         Mongoose[Mongoose ODM]
         Passport[Passport.js OAuth]
@@ -120,6 +121,7 @@ The Express API handles all orchestration, including item storage, node and trac
 When a user uploads content, the system processes it through several steps. This diagram shows how data flows from the user through all the services.
 
 ```mermaid
+%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#818cf8', 'primaryTextColor': '#ffffff', 'primaryBorderColor': '#4f46e5', 'lineColor': '#4f46e5', 'signalColor': '#4f46e5', 'signalTextColor': '#1e1b4b', 'actorBkg': '#818cf8', 'actorBorder': '#4f46e5', 'actorTextColor': '#ffffff', 'activationBkgColor': '#e0e7ff', 'activationBorderColor': '#4f46e5', 'noteBkgColor': '#e0e7ff', 'noteBorderColor': '#4f46e5', 'noteTextColor': '#1e1b4b', 'labelBoxBkgColor': '#e0e7ff', 'labelTextColor': '#1e1b4b', 'loopTextColor': '#1e1b4b', 'fontFamily': 'sans-serif'}}}%%
 sequenceDiagram
     participant U as User
     participant FE as Frontend
@@ -149,14 +151,14 @@ sequenceDiagram
 Each track follows a natural lifecycle from creation to conclusion. A new track starts when a user makes their first post of the week. The track stays active as new nodes get added. When certain conditions are met, like reaching 10 nodes or passing 7 days, the system automatically concludes the track with AI generated content.
 
 ```mermaid
-%%{init: {'flowchart': {'linear': 'basis'}}}%%
+%%{init: {'theme': 'base', 'flowchart': {'defaultRenderer': 'elk', 'curve': 'basis'}, 'themeVariables': {'primaryColor': '#818cf8', 'primaryTextColor': '#ffffff', 'primaryBorderColor': '#4f46e5', 'lineColor': '#4f46e5', 'secondaryColor': '#e0e7ff', 'tertiaryColor': '#f0fdf4', 'clusterBkg': '#e0e7ff', 'edgeLabelBackground': '#1e1b4b', 'fontFamily': 'sans-serif'}}}%%
 flowchart LR
-    Start((Start)) --> Active
+    Start(( )) --> Active
 
     subgraph Active[Active Track]
         direction TB
-        A1[Add nodes]
-        A1 --> A1
+        A1([Add nodes])
+        A1 --->|repeat| A1
     end
 
     Active -->|10 nodes reached| Conclude
@@ -165,12 +167,12 @@ flowchart LR
 
     subgraph Conclude[Concluded]
         direction TB
-        C1[Generate story conclusion]
-        C2[Generate community reflection]
+        C1([Generate story conclusion])
+        C2([Generate community reflection])
         C1 --> C2
     end
 
-    Conclude --> End((End))
+    Conclude --> End(( ))
 ```
 
 ### Data Model Relationships
@@ -178,49 +180,17 @@ flowchart LR
 The core data models connect to form the foundation of the narrative system. Users own tracks and create items. Nodes wrap items and form a linked list structure within tracks.
 
 ```mermaid
-erDiagram
-    User ||--o{ Track : owns
-    User ||--o{ Item : creates
-    User ||--o{ Node : authors
-    User }o--o{ User : friends
+%%{init: {'theme': 'base', 'flowchart': {'defaultRenderer': 'elk', 'curve': 'basis'}, 'themeVariables': {'primaryColor': '#818cf8', 'primaryTextColor': '#ffffff', 'primaryBorderColor': '#4f46e5', 'lineColor': '#4f46e5', 'secondaryColor': '#e0e7ff', 'tertiaryColor': '#f0fdf4', 'clusterBkg': '#e0e7ff', 'edgeLabelBackground': '#1e1b4b', 'fontFamily': 'sans-serif'}}}%%
+flowchart TD
+    User([User]) -->|owns| Track([Track])
+    User -->|creates| Item([Item])
+    User -->|authors| Node([Node])
+    User <-->|friends| User
 
-    Track ||--o{ Node : contains
-    Node ||--|| Item : wraps
-    Node }o--o| Node : previous
-    Node }o--o{ User : liked_by
-
-    User {
-        ObjectId _id
-        string username
-        string email
-        string googleId
-        string avatar
-    }
-
-    Track {
-        ObjectId _id
-        ObjectId user_id
-        string week_id
-        string story
-        boolean concluded
-    }
-
-    Node {
-        ObjectId _id
-        ObjectId user_id
-        ObjectId user_item_id
-        string recap_sentence
-        string week_id
-    }
-
-    Item {
-        ObjectId _id
-        ObjectId user_id
-        string content_type
-        string content_url
-        string text
-        string description
-    }
+    Track -->|contains| Node
+    Node -->|wraps| Item
+    Node --->|previous| Node
+    Node <-->|liked_by| User
 ```
 
 ## Tech Stack
