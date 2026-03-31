@@ -81,7 +81,7 @@ The notification system keeps you connected. You will receive alerts when someon
 
 The application uses a three tier architecture that separates concerns cleanly. The React client handles the user interface, the Express API manages all the business logic, and a Python ML service handles AI generation tasks.
 
-```mermaid
+```
 %%{init: {'theme': 'base', 'flowchart': {'defaultRenderer': 'elk', 'curve': 'basis'}, 'themeVariables': {'primaryColor': '#818cf8', 'primaryTextColor': '#ffffff', 'primaryBorderColor': '#4f46e5', 'lineColor': '#4f46e5', 'secondaryColor': '#e0e7ff', 'tertiaryColor': '#f0fdf4', 'clusterBkg': '#e0e7ff', 'edgeLabelBackground': '#1e1b4b', 'fontFamily': 'sans-serif'}}}%%
 graph TB
     subgraph Frontend["Frontend (React + Vite)"]
@@ -113,6 +113,7 @@ graph TB
     FastAPI --> Gemini
     Express --> R2
 ```
+![Architecture](docs/diagrams/architecture.svg)
 
 The Express API handles all orchestration, including item storage, node and track management, daily limits, and auto conclude logic. The Python ML service is a stateless worker that only performs AI generation tasks. This separation makes the system easier to scale and maintain.
 
@@ -120,7 +121,7 @@ The Express API handles all orchestration, including item storage, node and trac
 
 When a user uploads content, the system processes it through several steps. This diagram shows how data flows from the user through all the services.
 
-```mermaid
+```
 %%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#818cf8', 'primaryTextColor': '#ffffff', 'primaryBorderColor': '#4f46e5', 'lineColor': '#4f46e5', 'signalColor': '#4f46e5', 'signalTextColor': '#1e1b4b', 'actorBkg': '#818cf8', 'actorBorder': '#4f46e5', 'actorTextColor': '#ffffff', 'activationBkgColor': '#e0e7ff', 'activationBorderColor': '#4f46e5', 'noteBkgColor': '#e0e7ff', 'noteBorderColor': '#4f46e5', 'noteTextColor': '#1e1b4b', 'labelBoxBkgColor': '#e0e7ff', 'labelTextColor': '#1e1b4b', 'loopTextColor': '#1e1b4b', 'fontFamily': 'sans-serif'}}}%%
 sequenceDiagram
     participant U as User
@@ -145,12 +146,13 @@ sequenceDiagram
     API-->>FE: Return item, node, and remaining count
     FE->>FE: Refresh track display
 ```
+![Item Upload Flow](docs/diagrams/upload-flow.svg)
 
 ### Track Lifecycle
 
 Each track follows a natural lifecycle from creation to conclusion. A new track starts when a user makes their first post of the week. The track stays active as new nodes get added. When certain conditions are met, like reaching 10 nodes or passing 7 days, the system automatically concludes the track with AI generated content.
 
-```mermaid
+```
 %%{init: {'theme': 'base', 'flowchart': {'defaultRenderer': 'elk', 'curve': 'basis'}, 'themeVariables': {'primaryColor': '#818cf8', 'primaryTextColor': '#ffffff', 'primaryBorderColor': '#4f46e5', 'lineColor': '#4f46e5', 'secondaryColor': '#e0e7ff', 'tertiaryColor': '#f0fdf4', 'clusterBkg': '#e0e7ff', 'edgeLabelBackground': '#1e1b4b', 'fontFamily': 'sans-serif'}}}%%
 flowchart LR
     Start(( )) --> Active
@@ -174,12 +176,14 @@ flowchart LR
 
     Conclude --> End(( ))
 ```
+![Track Lifecycle](docs/diagrams/track-lifecycle.svg)
+
 
 ### Data Model Relationships
 
 The core data models connect to form the foundation of the narrative system. Users own tracks and create items. Nodes wrap items and form a linked list structure within tracks.
 
-```mermaid
+```
 %%{init: {'theme': 'base', 'flowchart': {'defaultRenderer': 'elk', 'curve': 'basis'}, 'themeVariables': {'primaryColor': '#818cf8', 'primaryTextColor': '#ffffff', 'primaryBorderColor': '#4f46e5', 'lineColor': '#4f46e5', 'secondaryColor': '#e0e7ff', 'tertiaryColor': '#f0fdf4', 'clusterBkg': '#e0e7ff', 'edgeLabelBackground': '#1e1b4b', 'fontFamily': 'sans-serif'}}}%%
 flowchart TD
     User([User]) -->|owns| Track([Track])
@@ -192,6 +196,7 @@ flowchart TD
     Node --->|previous| Node
     Node <-->|liked_by| User
 ```
+![Data Model Relationships](docs/diagrams/data-model.svg)
 
 ## Tech Stack
 
