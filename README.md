@@ -1,5 +1,8 @@
-<img width="80" height="147" alt="Image" src="https://github.com/user-attachments/assets/9a4d531c-71ec-41a6-846d-e85d5aedf7b8" style="max-width: 100%; height: auto;"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-<img width="162" height="130" alt="Image" src="https://github.com/user-attachments/assets/03e2b12c-d610-4cd6-af97-fcda5ef6e35e" />
+<p>
+  <img width="80" alt="Image 1" src="https://github.com/user-attachments/assets/9a4d531c-71ec-41a6-846d-e85d5aedf7b8" />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <img width="130" alt="Image 2" src="https://github.com/user-attachments/assets/03e2b12c-d610-4cd6-af97-fcda5ef6e35e" />
+</p>
 
 **SPARKHACKS 2026**
 
